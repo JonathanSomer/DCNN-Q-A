@@ -1606,7 +1606,445 @@ Lots of data - finetune lots of layers.
 Week 8b - CNN Architectures
 \end_layout
 
+\begin_layout Subsection*
+Given image of input 
+\begin_inset Formula $227\times227\times3$
+\end_inset
+
+, and Conv2d layer with 96 filters of size
+\begin_inset Formula $11\times11$
+\end_inset
+
+ with stride 
+\begin_inset Formula $4$
+\end_inset
+
+, what would be the output size:
+\end_layout
+
 \begin_layout Standard
+The width and height is 
+\begin_inset Formula $\left(227-11\right)/4+1=55$
+\end_inset
+
+, so 
+\begin_inset Formula $55\times55\times96$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Given image of input 
+\begin_inset Formula $227\times227\times3$
+\end_inset
+
+, and Conv2d layer with 96 filters of size
+\begin_inset Formula $11\times11$
+\end_inset
+
+ with stride 
+\begin_inset Formula $4$
+\end_inset
+
+, how many parameters are there:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $11\cdot11\cdot3$
+\end_inset
+
+ for every filter, so 
+\begin_inset Formula $11\cdot11\cdot3\cdot96=34848$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Given input 
+\begin_inset Formula $55\times55\times96$
+\end_inset
+
+, what will be the output of a 
+\begin_inset Formula $Max\,Pool$
+\end_inset
+
+ layer with 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter size and stride 
+\begin_inset Formula $2$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+The width and height of the new input will be: 
+\begin_inset Formula $(55-3)/2+1=27$
+\end_inset
+
+, so 
+\begin_inset Formula $27\times27\times96$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Given image of input 
+\begin_inset Formula $13\times13\times256$
+\end_inset
+
+, and Conv2d layer with 96 filters of size 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ with stride 
+\begin_inset Formula $1$
+\end_inset
+
+, and 
+\begin_inset Formula $1$
+\end_inset
+
+ padding what would be the output size:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(\left(13+2\cdot1\right)-3\right)/1+1=13$
+\end_inset
+
+, 
+\begin_inset Formula $13\times13\times96$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+How is ZFNet different from AlexNet?
+\end_layout
+
+\begin_layout Standard
+ZFNet use the same architecture of AlexNet, but keep higher resolution at
+ the beginning(smaller stride at start), and use more channels at the deeper
+ layers.
+\end_layout
+
+\begin_layout Subsection*
+What are VGGNet building blocks?
+\end_layout
+
+\begin_layout Standard
+VGGNet is builded with only 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter convolution layers, 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ max-pool stide 
+\begin_inset Formula $2$
+\end_inset
+
+ layers, and at the end fully connected layers
+\end_layout
+
+\begin_layout Subsection*
+What were the 2 main changes that VGG net presented reletive to AlexNet
+ and ZFNet?
+\end_layout
+
+\begin_layout Enumerate
+Very small fillter right from the start that does not change the images
+ sizse (
+\begin_inset Formula $\left(3,3\right)$
+\end_inset
+
+, stride 
+\begin_inset Formula $1$
+\end_inset
+
+, padding 
+\begin_inset Formula $1$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+More layers (deeper net)
+\end_layout
+
+\begin_layout Subsection*
+What are the benefits of smaller fillter in VGGNet, for example a 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter reletive to 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ filter?
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Deeper: 
+\series default
+You can stack 
+\begin_inset Formula $3$
+\end_inset
+
+ Conv layer with filter 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ of each other to get the same receptive field of a 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ filter.
+ This allow deeper layers = more non-linearity.
+\begin_inset Newline newline
+\end_inset
+
+(Each stack of 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter enlarge the receptive field of the neuron by 
+\begin_inset Formula $1$
+\end_inset
+
+ to both sides, so after 
+\begin_inset Formula $3$
+\end_inset
+
+ stacks you get 
+\begin_inset Formula $3\times3\rightarrow5\times5\rightarrow7\times7$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+less parameters
+\series default
+
+\begin_inset Newline newline
+\end_inset
+
+(Each 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ uses 
+\begin_inset Formula $3\cdot3\cdot C$
+\end_inset
+
+ parameters, so 
+\begin_inset Formula $3\cdot\left(3^{2}\cdot C\right)=27\cdot C$
+\end_inset
+
+, on the other hand 
+\begin_inset Formula $7\cdot7\cdot C=49\cdot C$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Subsection*
+What is the 
+\begin_inset Quotes eld
+\end_inset
+
+Network within a network
+\begin_inset Quotes erd
+\end_inset
+
+ feature of the inception model?
+\end_layout
+
+\begin_layout Standard
+Design a good network topology and stack those onto each others.
+\end_layout
+
+\begin_layout Subsection*
+What is the structure of the inception model block?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename inception_model.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+What are 
+\begin_inset Formula $1\times1$
+\end_inset
+
+ Conv filter used for?
+\end_layout
+
+\begin_layout Standard
+To reduce the number of channels without much parameters and without losing
+ resolution
+\end_layout
+
+\begin_layout Subsection*
+What do you add additinal gradient at lower layers?
+\end_layout
+
+\begin_layout Standard
+You can add auxilary outputs that try to classify the images at earlier
+ stages.
+\end_layout
+
+\begin_layout Subsection*
+When stacking convolutional layers onto each other, what happend to the
+ losses as the depth get larger?
+\end_layout
+
+\begin_layout Standard
+You get higher training and test error 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+You don't succeed in over-fitting, even thougth the model is more complex
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename stack_convolution_layer.png
+	width 4cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Describe the ResNet blocks:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ResNet.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Essentialy 
+\begin_inset Formula $F(X)+X$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+What does the ResNet block try to solve?
+\end_layout
+
+\begin_layout Standard
+When building deeper network the input get distorted after many layers,
+ and the gradient vanish when going all the way back to the first layers.
+ The addition of the input at each block keep the data from distorting too
+ much, and allow the gradient to flow more easily back to the first layers.
+\end_layout
+
+\begin_layout Subsection*
+State 1 technique that allow you to reduce computation cost in ResNet:
+\end_layout
+
+\begin_layout Standard
+Use 
+\begin_inset Quotes eld
+\end_inset
+
+bottleneck
+\begin_inset Quotes erd
+\end_inset
+
+ layers:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename bottleneck_layers.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This avoid doing filters when both the input number of chanels and the output
+ number of chanels is high, instead it reduce the dimention of the data
+ first to 64 and then increase it back to 256
+\end_layout
+
+\begin_layout Subsection*
+State 4 ways to improve ResNet?
+\end_layout
+
+\begin_layout Enumerate
+Wide ResNet (More channels)
+\end_layout
+
+\begin_layout Enumerate
+Argregated ResNet (each block contain mutiple version that are agragated
+ at the end)
+\end_layout
+
+\begin_layout Enumerate
+Regularization: Stochastic Depth
+\end_layout
+
+\begin_layout Enumerate
+Squeeze-and-Excitation networks (SENet) - Before adding back the 
+\begin_inset Formula $X$
+\end_inset
+
+, learn how much to 
+\begin_inset Quotes eld
+\end_inset
+
+scale
+\begin_inset Quotes erd
+\end_inset
+
+ each channel
+\end_layout
+
+\begin_layout Subsubsection*
+How does a Dense Block (from dense net) look like?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/denseblock.png
+	width 3cm
+
+\end_inset
+
 
 \end_layout
 
