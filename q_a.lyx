@@ -1,5 +1,5 @@
-#LyX 2.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 544
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -7,6 +7,9 @@
 \textclass article
 \begin_preamble
 \usepackage{algorithm,algpseudocode}
+% Added by lyx2lyx
+\renewcommand{\textendash}{--}
+\renewcommand{\textemdash}{---}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -24,8 +27,6 @@
 \font_osf false
 \font_sf_scale 100 100
 \font_tt_scale 100 100
-\use_microtype false
-\use_dash_ligatures true
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -55,7 +56,6 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
-\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -64,10 +64,7 @@
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\is_math_indent 0
-\math_numbering_side default
-\quotes_style english
-\dynamic_quotes 0
+\quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -1607,6 +1604,313 @@ Lots of data - finetune lots of layers.
 
 \begin_layout Section*
 Week 8b - CNN Architectures
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Section*
+Week 9 - Recurrent Neural Nets
+\end_layout
+
+\begin_layout Subsubsection*
+What is the Recurrent Neural Net function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+h_{t} & =\text{State at time }t\\
+x_{t} & =\text{Input for time }t\\
+F_{W}\left(h,x\right) & =\text{Function with parameters }W\text{ that recive state and input}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+h_{t}=F_{W}\left(h_{t-1},x_{t}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Name 3 RNN structures 'types':
+\end_layout
+
+\begin_layout Enumerate
+Many to One
+\end_layout
+
+\begin_layout Enumerate
+Many to Many
+\end_layout
+
+\begin_layout Enumerate
+One to Many - 
+\begin_inset Quotes eld
+\end_inset
+
+generate sequence from single input
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Give an example of 
+\begin_inset Quotes eld
+\end_inset
+
+Many to One
+\begin_inset Quotes erd
+\end_inset
+
+ RNN
+\end_layout
+
+\begin_layout Standard
+Sequence of words -> Sentiment
+\end_layout
+
+\begin_layout Subsubsection*
+Give an example of 
+\begin_inset Quotes eld
+\end_inset
+
+One to Many
+\begin_inset Quotes erd
+\end_inset
+
+ RNN
+\end_layout
+
+\begin_layout Standard
+Image -> Sequence of words
+\end_layout
+
+\begin_layout Subsubsection*
+Give an example of 
+\begin_inset Quotes eld
+\end_inset
+
+Many to Many
+\begin_inset Quotes erd
+\end_inset
+
+ RNN
+\end_layout
+
+\begin_layout Standard
+Video -> Classification on frame level
+\end_layout
+
+\begin_layout Subsubsection*
+How do you train a character level RNN on some language model, and output
+ same random text from it?
+\end_layout
+
+\begin_layout Standard
+Train the model such that at every step it should predict the next character
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/rnn_nlp_charlevel_example.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Feed forward the character it predict to generate:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/rnn_nlp_charlevel_example2.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What 2 ways are there to backpropogate RNN:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Backpropogate through time: 
+\series default
+Unfold the layer repetition as different layers, backpropogate throuth all
+ of them
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Truncated backpropogation through time: 
+\series default
+Unfold the layer repetition in chunks and back propogate on only those chunks
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/truncated_bpptt.png
+	width 4cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What are 2 problems 
+\series bold
+that Truncated
+\series default
+ backpropogate help solve?
+\end_layout
+
+\begin_layout Enumerate
+Single gradient computation require many interation unfolding
+\end_layout
+
+\begin_layout Enumerate
+Gradient vanish after many iterations
+\end_layout
+
+\begin_layout Subsubsection*
+How would you build a neural network that generate text descripion of the
+ image?
+\end_layout
+
+\begin_layout Standard
+Encode image into a latent vector (multiple conv and pooling)
+\begin_inset Newline newline
+\end_inset
+
+Import the vector as a hidden state layer to RNN and generate words from
+ it
+\end_layout
+
+\begin_layout Subsubsection*
+Describe how would you add an attention model to the previous example
+\end_layout
+
+\begin_layout Standard
+Encode the image into latent matrix of size 
+\begin_inset Formula $v=Locations\times Features$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+At each RNN step output weights vector 
+\begin_inset Formula $a=Location\times1$
+\end_inset
+
+ which represent weight per location and feed the RNN with single feature
+ vector 
+\begin_inset Formula $z=\sum_{i=1}^{Locations}a_{i}v_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/attention_model.png
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is multilayer RNN?
+\end_layout
+
+\begin_layout Standard
+running the input of each timestamp of a RNN as a sequence that goes through
+ another RNN
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/mutilayerRNN.png
+	width 4cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Give one way to handle vanilla RNN gradient explosion problem:
+\end_layout
+
+\begin_layout Standard
+scale gradient norm alogn unfolds
+\end_layout
+
+\begin_layout Subsubsection*
+What is the structure of LSTM?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/LSTM.png
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the problem LSTM network solves and how does it do that?
+\end_layout
+
+\begin_layout Standard
+Vanilla RNN gradients "vanish", because of the repetative activation function
+ and matrix multipication and finite-precision numbers.
+\begin_inset Newline newline
+\end_inset
+
+LSTM fix this issue by creating an easier way for the gradient to flow through
+ uninterrupted, which allow the gradient an easier way not to 
+\begin_inset Quotes eld
+\end_inset
+
+vanish
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/kessi/Documents/DCNN-Q-A/LSTM_highway.png
+	width 8cm
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
