@@ -5,6 +5,9 @@
 \save_transient_properties true
 \origin unavailable
 \textclass article
+\begin_preamble
+\usepackage{algorithm,algpseudocode}
+\end_preamble
 \use_default_options true
 \maintain_unincluded_children false
 \language english
@@ -29,6 +32,7 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -44,6 +48,7 @@
 \use_package undertilde 1
 \cite_engine basic
 \cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -93,6 +98,19 @@ When to use StandardScaling vs Normalization?
 
 \begin_layout Subsubsection*
 SOLVE HW3?
+\end_layout
+
+\begin_layout Subsubsection*
+Instance Normalization - don't we lose lots of information from normalzing
+ each channel - 
+\begin_inset Quotes eld
+\end_inset
+
+the fire channel
+\begin_inset Quotes erd
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
@@ -775,6 +793,1451 @@ See that weight updates are around 0.01 of the weight magnitude.
 
 \begin_layout Section*
 Week 8a
+\end_layout
+
+\begin_layout Subsubsection*
+How do we batch normalize images?
+\end_layout
+
+\begin_layout Standard
+Per channel.
+\end_layout
+
+\begin_layout Subsubsection*
+What is Layer Normalization?
+\end_layout
+
+\begin_layout Standard
+Normalize each example independently using all of its features: 
+\begin_inset Formula 
+\begin{align*}
+\gamma,\beta\in1\times D\\
+\mu,\sigma\in1\times N\\
+y=\gamma(x-\mu)/\sigma+\beta
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Same in train and test.
+\end_layout
+
+\begin_layout Subsubsection*
+When is Layer Normalization needed, why?
+\end_layout
+
+\begin_layout Standard
+RNNs.
+ Learning constant 
+\begin_inset Formula $\gamma,\beta$
+\end_inset
+
+ can lead to bad behavior in RNNs (explode/implode).
+\end_layout
+
+\begin_layout Subsubsection*
+What is Instance Normalization?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Layer Normalization
+\begin_inset Quotes erd
+\end_inset
+
+ for images.
+ Normalize each example independently, per channel using all pixels of that
+ channel: 
+\begin_inset Formula 
+\begin{align*}
+\gamma,\beta\in1\times C\\
+\mu,\sigma\in N\times C\\
+y=\gamma(x-\mu)/\sigma+\beta
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Same in train and test.
+\end_layout
+
+\begin_layout Subsubsection*
+Draw the 3 cubes of Normalization for images:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted2.png
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is group norm?
+\end_layout
+
+\begin_layout Standard
+Same as instance norm except we use a group of channels (arbitrarily chosen?)
+\end_layout
+
+\begin_layout Subsubsection*
+What is DBN?
+\end_layout
+
+\begin_layout Standard
+Decorrelated Batch Norm.
+ Take the decorrelated 
+\begin_inset Formula $x$
+\end_inset
+
+, remove mean, divide each feature by it's standard deviation.
+ Now we have 
+\begin_inset Quotes eld
+\end_inset
+
+whitened data
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\Sigma^{-\frac{1}{2}}\left(x_{i}-\mu\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+State 3 problems of Vanilla SGD?
+\end_layout
+
+\begin_layout Enumerate
+There can be large changes in one direction relative to others so learning
+ rate does not fit all directions equally well.
+\end_layout
+
+\begin_layout Enumerate
+Presence of local minima or saddle points
+\end_layout
+
+\begin_layout Enumerate
+Gradients are noisy due to use of mini-batches.
+\end_layout
+
+\begin_layout Subsubsection*
+What happens in SGD if in one direction we have a large gradient and in
+ another a small gradient?
+\end_layout
+
+\begin_layout Standard
+Jumps in large direction, slow in small direction.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the condition number of a hessian matrix? <LEARN MORE ABOUT THIS?>
+\end_layout
+
+\begin_layout Standard
+Ratio of largest to smallest singular value.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the vanilla sgd update rule of the weights?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $W_{t+1}=W_{t}-\alpha\nabla f(W_{t})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+State a SGD update rule which enables the algorithm to overcome saddle points
+ and local minima (zero gradients)?
+\end_layout
+
+\begin_layout Standard
+Momentum!
+\begin_inset Formula 
+\begin{align*}
+v_{0} & =0\\
+v_{t+1} & =\rho v_{t}+\nabla f(W_{t})\\
+W_{t+1} & =W_{t}-\alpha v_{t+1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Give an alternative formulation to the momentum formula:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+v_{0} & =0\\
+v_{t+1} & =\rho v_{t}-\alpha\nabla f(W_{t})\\
+W_{t+1} & =W_{t}+v_{t+1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+In the Momentum method, what is the problem with adding the gradient at
+ 
+\begin_inset Formula $W_{t}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+We are moving, the gradient at 
+\begin_inset Formula $W_{t}$
+\end_inset
+
+ might not be relevant if we will move far from it due to 
+\begin_inset Formula $v_{t}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the solution to the previous issue (develops second formulation
+ of Momentum formula)?
+\end_layout
+
+\begin_layout Standard
+Nesterov momentum.
+\begin_inset Formula 
+\begin{align*}
+v_{0} & =0\\
+v_{t+1} & =\rho v_{t}-\alpha\nabla f(W_{t}+\rho v_{t})\\
+W_{t+1} & =W_{t}+v_{t+1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is a common re-paramatization of the Nesterov rule?
+\end_layout
+
+\begin_layout Standard
+Denote:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tilde{W}_{t}=W_{t}+\rho v_{t}
+\]
+
+\end_inset
+
+ The update rule becomes:
+\begin_inset Formula 
+\[
+\tilde{W}_{t+1}=\tilde{W}_{t}+v_{t+1}+\rho(v_{t+1}-v_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+How do we overcome the issue of different sized gradients in different direction
+s?
+\end_layout
+
+\begin_layout Standard
+AdaGrad! We sum the square of the gradients at each step, and divide each
+ gradient by the square root of this sum.
+ (the norm of the vector of all gradients seen thus far for this direction)
+\begin_inset Newline newline
+\end_inset
+
+Algorithm:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted3.png
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What happens for directions with large gradient?
+\end_layout
+
+\begin_layout Standard
+Smaller steps.
+\end_layout
+
+\begin_layout Subsubsection*
+What happens for directions with small gradient?
+\end_layout
+
+\begin_layout Standard
+Large steps initially.
+\end_layout
+
+\begin_layout Subsubsection*
+What happens to the step size over long time?
+\end_layout
+
+\begin_layout Standard
+Goes to zero.
+\end_layout
+
+\begin_layout Subsubsection*
+How do you prevent this from happening?
+\end_layout
+
+\begin_layout Standard
+RMSprop - apply a decay to the sum of square gradients from AdaGrad (typically
+ 0.9).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted4.png
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Why is this decay computation not exactly a weighted average?
+\end_layout
+
+\begin_layout Standard
+Initial gradient is 
+\begin_inset Formula $0$
+\end_inset
+
+!
+\end_layout
+
+\begin_layout Subsubsection*
+How is the combination of RMSprop and Momentum called?
+\end_layout
+
+\begin_layout Standard
+Adam!
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted5.png
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Explain the unbiasing term:
+\end_layout
+
+\begin_layout Standard
+After unfolding we have the following weighted average (assuming first moment
+ is initialized to 0):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{m_{t}}=\frac{\beta^{t-1}g_{1}+\beta^{t-2}g_{2}+....g_{t}}{\beta^{t-1}+\beta^{t-2}+...+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What hyperparamater do all of these methods have?
+\end_layout
+
+\begin_layout Standard
+Learning Rate
+\end_layout
+
+\begin_layout Subsubsection*
+Draw a graph with 4 cases for constant learning rate:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted6.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+State 3 Methods for learning rate variation:
+\end_layout
+
+\begin_layout Enumerate
+Step: divide by half every 
+\begin_inset Formula $n$
+\end_inset
+
+ epochs.
+\end_layout
+
+\begin_layout Enumerate
+Exponential decay: 
+\begin_inset Formula $\alpha_{t}=\alpha_{0}e^{-kt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+1/t decay: 
+\begin_inset Formula $\alpha_{t}=\frac{\alpha_{0}}{\left(1+kt\right)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Why is learning rate decay less common with Adam than with SGD + Momentum:
+\end_layout
+
+\begin_layout Standard
+Adam has the learning rate adjusted per paramater according to size of the
+ gradient.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the difference in the step taken using second order optimization?
+\end_layout
+
+\begin_layout Standard
+In first order we take a small step in the direction of decrease.
+ In second order optimization we take a guess at the minimum directly.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the second order multi-variate taylor series:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J\left(\theta\right)\approx J\left(\theta_{0}\right)+\left(\theta-\theta_{0}\right)^{T}\nabla J\left(\theta_{0}\right)+\frac{1}{2}\left(\theta-\theta_{0}\right)^{T}{\bf H}\left(\theta-\theta_{0}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset Formula $\frac{\partial x^{T}Ax}{\partial x}$
+\end_inset
+
+=?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(A+A^{T}\right)x$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the critical point, according to the above expansion:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\frac{\partial J\left(\theta\right)}{\partial\theta} & =\nabla J\left(\theta_{0}\right)+{\bf H}\left(\theta-\theta_{0}\right)=0\\
+{\bf H}\left(\theta-\theta_{0}\right) & =-\nabla J\left(\theta_{0}\right)\\
+\theta & =\theta_{0}-{\bf H}^{-1}\nabla J\left(\theta_{0}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+How many hyperparamaters does a second order optimization scheme have?
+\end_layout
+
+\begin_layout Standard
+None!
+\end_layout
+
+\begin_layout Subsubsection*
+Why can't we use this in practice?
+\end_layout
+
+\begin_layout Standard
+Complexity of computing 
+\begin_inset Formula ${\bf H}^{-1}$
+\end_inset
+
+ is 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the name of an algorithm for Solving this in 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ time?
+\end_layout
+
+\begin_layout Standard
+BFGS or L-BFGS
+\end_layout
+
+\begin_layout Subsubsection*
+In what setting is L-BFGS useful?
+\end_layout
+
+\begin_layout Standard
+Full batch, deterministic (consistent 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ to be optimized)
+\end_layout
+
+\begin_layout Subsubsection*
+How do we know how many epochs to use?
+\end_layout
+
+\begin_layout Standard
+Early stopping - stop when validation error starts increasing, or train
+ for a lot of epochs and keep a snapshot of best performing model.
+\end_layout
+
+\begin_layout Subsubsection*
+What are model ensembles?
+\end_layout
+
+\begin_layout Standard
+A method for reducing variance via averaging of many models.
+\end_layout
+
+\begin_layout Subsubsection*
+How can we use model ensembles in the Deep Learning setting without training
+ many different models from scratch?
+\end_layout
+
+\begin_layout Standard
+Use different snapshots of the same model.
+\end_layout
+
+\begin_layout Subsubsection*
+A specific model seems to just improve its performance over time.
+ How can we still use snapshots while having relatively varying models?
+\end_layout
+
+\begin_layout Standard
+Cyclic Learning rate.
+ Such as cosine annealing - start with 
+\begin_inset Formula $\alpha=\alpha_{\min}+\frac{1}{2}\left(\alpha_{\max}-\alpha_{\min}\right)\left(1+\cos\left(\pi\frac{T\mod N+1}{N}\right)\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+How can we implement snapshot model ensembles without holding many paramater
+ vectors?
+\end_layout
+
+\begin_layout Standard
+Polyak Averaging.
+ Compute a running average of the paramaters:
+\begin_inset Formula 
+\[
+W_{\text{test}}=0.995W_{\text{test}}+0.005W_{t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+State _ methods for Regularization?
+\end_layout
+
+\begin_layout Enumerate
+Add weight decay term to loss: 
+\begin_inset Formula $L_{2},L_{1},\text{or a weighted mix of both}$
+\end_inset
+
+ (elastic net)
+\end_layout
+
+\begin_layout Enumerate
+Dropout
+\end_layout
+
+\begin_layout Enumerate
+Randomness - add randomness in training, average out in testing (see next
+ questions)
+\end_layout
+
+\begin_layout Enumerate
+Data Augmentation
+\end_layout
+
+\begin_layout Enumerate
+DropConnect
+\end_layout
+
+\begin_layout Enumerate
+Fractional Max Pooling
+\end_layout
+
+\begin_layout Enumerate
+Stochastic Depth
+\end_layout
+
+\begin_layout Subsubsection*
+Explain Dropout:
+\end_layout
+
+\begin_layout Standard
+In the forward pass set each neuron to zero with probability 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+State two interpretations to why Dropout could be useful:
+\end_layout
+
+\begin_layout Enumerate
+Force redundancy of features and prevent co-adaptation
+\end_layout
+
+\begin_layout Enumerate
+Train an ensemble of models, each with slightly different architecture,
+ all share some paramaters.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the issue with using models trained with Droput in the test phase?
+\end_layout
+
+\begin_layout Standard
+Droupout makes output random:
+\begin_inset Formula 
+\[
+y=f_{W}(\underset{\text{input image}}{x},\underset{\text{random mask}}{z})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the output we would like to approximate?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}_{z}\left[f_{W}(x,z)\right]=\int_{z}p\left(z\right)f_{W}(x,z)dz
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the randomness method 
+\begin_inset Quotes eld
+\end_inset
+
+template from before 
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Why can't we simply activate all neurons in test time?
+\end_layout
+
+\begin_layout Standard
+If we have trained with only 
+\begin_inset Formula $p$
+\end_inset
+
+ of the neurons in each layer activated, we will have a larger expected
+ value in test time.
+\end_layout
+
+\begin_layout Subsubsection*
+What are 2 possible solutions for this?
+\end_layout
+
+\begin_layout Standard
+In both solutions we activate all neurons in test time.
+ The solutions differ in the time in which we scale the outputs.
+ Assuming a neuron is kept with probability 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+In test time, scale all activations of each layer by 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+In training time, divide the activations of each layer by 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ (testing becomes a simple feedforward)
+\end_layout
+
+\begin_layout Subsubsection*
+How is the second method called?
+\end_layout
+
+\begin_layout Standard
+Inverted Dropout.
+\end_layout
+
+\begin_layout Subsubsection*
+State _ methods for data augmentation:
+\end_layout
+
+\begin_layout Enumerate
+Flips
+\end_layout
+
+\begin_layout Enumerate
+Random crops and scales
+\end_layout
+
+\begin_layout Enumerate
+Color jittering - randomize contrast and brightness
+\end_layout
+
+\begin_layout Enumerate
+Distortions - lenses, stretch, translation, shearing etc.
+\end_layout
+
+\begin_layout Subsubsection*
+How does transfer learning differ when using large/small datasets (both
+ relatively similar to the original one)?
+\end_layout
+
+\begin_layout Standard
+Small - finetune only last layer.
+ Large - maybe finetune a few layers
+\end_layout
+
+\begin_layout Subsubsection*
+How does transfer learning differ when the target dataset is very different
+ from the original one.
+ Explain for small/large amount of data?
+\end_layout
+
+\begin_layout Standard
+Lots of data - finetune lots of layers.
+ Little data - try linear classifiers from different layers, probably can't
+ finetune many layers on a huge net using little data.
+\end_layout
+
+\begin_layout Section*
+Week 8b - CNN Architectures
+\end_layout
+
+\begin_layout Section*
+Week 11a - Detection and Segmentation
+\end_layout
+
+\begin_layout Subsubsection*
+Define Semantic Segmentation:
+\end_layout
+
+\begin_layout Standard
+Tag each pixel with the type of element inside it.
+ No differentiation between objects of the same type:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted7.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+State _ techniques for semantic segmentation:
+\end_layout
+
+\begin_layout Enumerate
+Sliding Window
+\end_layout
+
+\begin_layout Enumerate
+Fully Convolutional
+\end_layout
+
+\begin_layout Subsubsection*
+What is the problem with the sliding window method?
+\end_layout
+
+\begin_layout Standard
+Inefficient.
+ Not sharing features between intersecting windows.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the problem with the second method <slide 10, not understood>?
+\end_layout
+
+\begin_layout Standard
+flm
+\end_layout
+
+\begin_layout Subsubsection*
+Solution?
+\end_layout
+
+\begin_layout Standard
+Downsampling (pooling, and strided convolutions) and then upsampling (unpooling
+ and strided transpose convolution)
+\end_layout
+
+\begin_layout Subsubsection*
+State 3 methods for un-Pooling:
+\end_layout
+
+\begin_layout Enumerate
+Nearest Neighbor - if max was a 2, set entire region to 2.
+\end_layout
+
+\begin_layout Enumerate
+Bed of Nails - if max was a 2, set top left corner to 2, all others to the
+ minimal value, say 0.
+\end_layout
+
+\begin_layout Enumerate
+Smart Bed of Nails - keep track of max locations during pooling and place
+ the max value back in that location.
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the transpose convolution:
+\end_layout
+
+\begin_layout Standard
+Use the input as a weight applied to the convolution filter, use strides
+ to re-build the image.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the 1D convolution and transpose convolution.
+ Using stride 1 and stride >1:
+\end_layout
+
+\begin_layout Standard
+Stride 1:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\overrightarrow{x}*\overrightarrow{a} & =X\overrightarrow{a}\\
+\left(\begin{array}{ccccc}
+x & y & z & 0 & 0\\
+0 & x & y & z & 0\\
+0 & 0 & x & y & z
+\end{array}\right) & \left(\begin{array}{c}
+0\\
+a\\
+b\\
+c\\
+0
+\end{array}\right)=\left(\begin{array}{c}
+ay+bz\\
+ax+by+cz\\
+bx+cy
+\end{array}\right)
+\end{align*}
+
+\end_inset
+
+Stride 1 - transpose:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\overrightarrow{x}*^{T}\overrightarrow{a} & =X^{T}\overrightarrow{a}\\
+\left(\begin{array}{ccc}
+x & 0 & 0\\
+y & x & 0\\
+z & y & x\\
+0 & z & y\\
+0 & 0 & z
+\end{array}\right) & \left(\begin{array}{c}
+a\\
+b\\
+c
+\end{array}\right)=\left(\begin{array}{c}
+ax\\
+ay+bx\\
+az+by+cx\\
+bz+cy\\
+cz
+\end{array}\right)
+\end{align*}
+
+\end_inset
+
+ Stride = 2:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\overrightarrow{x}*\overrightarrow{a} & =X\overrightarrow{a}\\
+\left(\begin{array}{ccccc}
+x & y & z & 0 & 0\\
+0 & 0 & x & y & z
+\end{array}\right) & \left(\begin{array}{c}
+0\\
+a\\
+b\\
+c\\
+0
+\end{array}\right)=\left(\begin{array}{c}
+ay+bz\\
+bx+cy
+\end{array}\right)
+\end{align*}
+
+\end_inset
+
+Stride 1 - transpose:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\overrightarrow{x}*^{T}\overrightarrow{a} & =X^{T}\overrightarrow{a}\\
+\left(\begin{array}{ccc}
+x & 0 & 0\\
+y & 0 & 0\\
+z & x & 0\\
+0 & y & 0\\
+0 & z & x
+\end{array}\right) & \left(\begin{array}{c}
+a\\
+b
+\end{array}\right)=\left(\begin{array}{c}
+ax\\
+ay\\
+az+bx\\
+by\\
+bz
+\end{array}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Slides 32-33?? 3D reconstruction
+\end_layout
+
+\begin_layout Standard
+Downsampling (pooling, and strided convolutions) and then upsampling (unpooling
+ and strided transpose convolution)
+\end_layout
+
+\begin_layout Subsubsection*
+Describe _ methods for 2D object detection:
+\end_layout
+
+\begin_layout Enumerate
+Classification + Localization: a CNN (pretrained on imagenet usually) FC
+ to classification softmax loss + FC to box 
+\begin_inset Formula $(x,y,w,h)$
+\end_inset
+
+ with L2 loss.
+\end_layout
+
+\begin_layout Enumerate
+Classification sliding window.
+\end_layout
+
+\begin_layout Enumerate
+R-CNN
+\end_layout
+
+\begin_layout Enumerate
+Fast R-CNN
+\end_layout
+
+\begin_layout Enumerate
+Faster R-CNN
+\end_layout
+
+\begin_layout Subsubsection*
+State the issue with sliding window:
+\end_layout
+
+\begin_layout Standard
+complexity.
+\end_layout
+
+\begin_layout Subsubsection*
+State an optimization for classification window
+\end_layout
+
+\begin_layout Standard
+Region proposals / Selective search.
+\end_layout
+
+\begin_layout Subsubsection*
+Explain the R-CNN method:
+\end_layout
+
+\begin_layout Standard
+A region proposal based classification method:
+\end_layout
+
+\begin_layout Enumerate
+Get regions
+\end_layout
+
+\begin_layout Enumerate
+Warp so fit into ConvNet
+\end_layout
+
+\begin_layout Enumerate
+Finetune with classification log-loss
+\end_layout
+
+\begin_layout Enumerate
+Classify with SVMs + FC to regression for BBox
+\end_layout
+
+\begin_layout Subsubsection*
+Main 2 problems with R-CNN:
+\end_layout
+
+\begin_layout Standard
+Slow, many ad-hoc training objectives (SVM, regression etc)
+\end_layout
+
+\begin_layout Subsubsection*
+Explain the Fast-R-CNN method:
+\end_layout
+
+\begin_layout Enumerate
+Whole image through ConvNet.
+\end_layout
+
+\begin_layout Enumerate
+Use the features + region proposal method to generate proposals.
+\end_layout
+
+\begin_layout Enumerate
+RoI pooling (anything special about this????)
+\end_layout
+
+\begin_layout Enumerate
+FCs
+\end_layout
+
+\begin_layout Enumerate
+SoftMax (log loss) + SVM for classification.
+ Reg for BBox (smooth L1 Loss)
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the smooth 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ loss function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+0.5x^{2} & |x|<1\\
+|x|-0.5 & \text{else}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the difference between the Fast R-CNN and the Faster R-CNN?
+\end_layout
+
+\begin_layout Standard
+Faster has an additional Region Proposal Network before the RoI pooling
+ (two more losses, in total 4).
+\end_layout
+
+\begin_layout Subsubsection*
+State a method for instance segmentation:
+\end_layout
+
+\begin_layout Standard
+Mask R-CNN.
+\end_layout
+
+\begin_layout Subsubsection*
+What is YOLO/SSD?
+\end_layout
+
+\begin_layout Standard
+You only look once, single shot detection.
+\end_layout
+
+\begin_layout Subsubsection*
+How does the method for YOLO/SSD work?
+\end_layout
+
+\begin_layout Standard
+Divide image into a 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ grid.
+ For each square: give a score per class of the 
+\begin_inset Formula $C$
+\end_inset
+
+ classes and regress to 
+\begin_inset Formula $B$
+\end_inset
+
+ boxes - 
+\begin_inset Formula $(x,y,w,h,\text{confidence})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the 3D camera model, give names.
+ Specifically, the wierd one!
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted8.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the target of a 3D object detection task?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(x,y,z,w,h,l,r,p,y\right)$
+\end_inset
+
+ (roll, pitch yaw)
+\end_layout
+
+\begin_layout Subsubsection*
+What is the simplified 3D bbox setting?
+\end_layout
+
+\begin_layout Standard
+No roll and pitch.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the general method for 3D object detection?
+\end_layout
+
+\begin_layout Standard
+Similar structure to Faster R-CNN.
+ combine 3D proposals from many views and sensors.
+ regress bbox numbers.
+\end_layout
+
+\begin_layout Section*
+Week 11 - generative models
+\end_layout
+
+\begin_layout Subsubsection*
+What are the two types of density estimation?
+\end_layout
+
+\begin_layout Enumerate
+explicit - explicitly solve for and define 
+\begin_inset Formula $p_{\text{model}}\left(x\right)\sim p_{\text{data}}\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+implicit - can only sample from some 
+\begin_inset Formula $p_{\text{model}}\left(x\right)\sim p_{\text{data}}\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Draw the taxonomy graph of generative models
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename pasted9.png
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the main concept behind Fully Visible Belief Networks:
+\end_layout
+
+\begin_layout Standard
+Generate an entire picture via 1D distributions:
+\begin_inset Formula 
+\[
+\prod_{i=1}^{n}p\left(x_{i}|x_{1},....,x_{i-1}\right)
+\]
+
+\end_inset
+
+ Each 
+\begin_inset Formula $p$
+\end_inset
+
+ is expressed via NN
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the PixelRNN
+\end_layout
+
+\begin_layout Standard
+Generate image starting from corner.
+ Spatial LSTM
+\end_layout
+
+\begin_layout Subsubsection*
+DrawBack?
+\end_layout
+
+\begin_layout Standard
+Slow.
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the PixelCNN
+\end_layout
+
+\begin_layout Standard
+Row by row, pixel by pixel.
+ Generate via CNN over context region.
+\end_layout
+
+\begin_layout Subsubsection*
+Which is faster?
+\end_layout
+
+\begin_layout Standard
+PixelCNN - bound yourself to a smaller context region + something about
+ parellilzation??S??
+\end_layout
+
+\begin_layout Subsubsection*
+State 3 Pros of these two models:
+\end_layout
+
+\begin_layout Enumerate
+Explicitly compute 
+\begin_inset Formula $p\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Empirical likelihood of training data can serve as validation
+\end_layout
+
+\begin_layout Enumerate
+Good samples (huh?)
+\end_layout
+
+\begin_layout Subsubsection*
+State a con of these methods
+\end_layout
+
+\begin_layout Standard
+Sequential generation of pixels is slow.
+\end_layout
+
+\begin_layout Subsubsection*
+Describe how to use an Autoencoder for a supervised learning task with few
+ samples:
+\end_layout
+
+\begin_layout Enumerate
+Train the autoencoder.
+\end_layout
+
+\begin_layout Enumerate
+Drop the decoder
+\end_layout
+
+\begin_layout Enumerate
+Fine tune the encoder + FC classifier part on the few labelled examples.
+\end_layout
+
+\begin_layout Subsubsection*
+Describe how to use an autoencoder for generating data:
+\end_layout
+
+\begin_layout Standard
+We assume that data is generated in the following manner:
+\end_layout
+
+\begin_layout Standard
+Sample 
+\begin_inset Formula $z$
+\end_inset
+
+ from true prior
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p_{\theta^{*}}\left(z\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Sample 
+\begin_inset Formula $x$
+\end_inset
+
+ from true conditional:
+\begin_inset Formula 
+\[
+p_{\theta^{*}}\left(x|z\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Q
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $p_{\theta}\left(x\right)=\int_{z}p_{\theta}\left(z\right)\cdot p_{\theta}\left(x|z\right)dz$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A
+\end_layout
+
+\begin_layout Subsubsection*
+Q
+\end_layout
+
+\begin_layout Standard
+A
 \end_layout
 
 \end_body
