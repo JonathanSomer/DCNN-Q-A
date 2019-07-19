@@ -2152,6 +2152,25 @@ Many to Many
 Video -> Classification on frame level
 \end_layout
 
+\begin_layout Subsection*
+Write down te equation for Vanilla RNN
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $h_{t}=tanh\left(W_{hh}h_{t-1}+W_{xh}x_{t}\right)$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $y_{t}=W_{hy}h_{t}$
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsubsection*
 How do you train a character level RNN on some language model, and output
  same random text from it?
@@ -2305,7 +2324,7 @@ Give one way to handle vanilla RNN gradient explosion problem:
 \end_layout
 
 \begin_layout Standard
-scale gradient norm alogn unfolds
+gradient clipping
 \end_layout
 
 \begin_layout Subsubsection*
