@@ -2417,11 +2417,11 @@ Inefficient.
 \end_layout
 
 \begin_layout Subsubsection*
-What is the problem with the second method <slide 10, not understood>?
+What is the problem with the second method?
 \end_layout
 
 \begin_layout Standard
-flm
+complexity of convolutions at original resolution.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2575,12 +2575,16 @@ bz
 \end_layout
 
 \begin_layout Subsubsection*
-Slides 32-33?? 3D reconstruction
+Describe the 3D reconstruction setting and architecure.
 \end_layout
 
 \begin_layout Standard
-Downsampling (pooling, and strided convolutions) and then upsampling (unpooling
- and strided transpose convolution)
+From set of images to 3D map of points in space.
+\begin_inset Newline newline
+\end_inset
+
+2D Downsampling (pooling, and strided convolutions), 3D convolutional LSTM,
+ and then 3D upsampling (unpooling and strided transpose convolution).
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2613,6 +2617,16 @@ Faster R-CNN
 \end_layout
 
 \begin_layout Subsubsection*
+State the issue with the Classification + Localization method:
+\end_layout
+
+\begin_layout Standard
+If we have more than one object in the image, we need a different number
+ of outputs.
+ BAD
+\end_layout
+
+\begin_layout Subsubsection*
 State the issue with sliding window:
 \end_layout
 
@@ -2633,23 +2647,71 @@ Explain the R-CNN method:
 \end_layout
 
 \begin_layout Standard
-A region proposal based classification method:
+Training:
 \end_layout
 
 \begin_layout Enumerate
-Get regions
+Obtain a feature extractor network, which can also classify images (AlexNet
+ + fine-tune for example)
 \end_layout
 
 \begin_layout Enumerate
-Warp so fit into ConvNet
+Per image in training dataset:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Run ROI algorithm.
+ Per ROI 
+\begin_inset Formula $\sim2K$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Feedforward warped version through network to obtain features.
+ Save in large dataset of 
+\begin_inset Formula 
+\begin{align*}
+x & =\left(\text{feature},\text{RoI BBOX}\right)\\
+y & =\left(\text{is object},\text{real BBOX}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Train SVM to identify objects.
 \end_layout
 
 \begin_layout Enumerate
-Finetune with classification log-loss
+Train regression models to warp predicted bbox into true bbox
+\end_layout
+
+\begin_layout Standard
+Test:
 \end_layout
 
 \begin_layout Enumerate
-Classify with SVMs + FC to regression for BBox
+Run image through RoI algorithm
+\end_layout
+
+\begin_layout Enumerate
+Per RoI feedforward warped version through network.
+\end_layout
+
+\begin_layout Enumerate
+Predict if object using SVM.
+\end_layout
+
+\begin_layout Enumerate
+If object, predict which and predict true BBOX using regression models.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2657,34 +2719,120 @@ Main 2 problems with R-CNN:
 \end_layout
 
 \begin_layout Standard
-Slow, many ad-hoc training objectives (SVM, regression etc)
+Slow in train and test (2K ROIs), many ad-hoc training objectives (SVM,
+ regression etc)
 \end_layout
 
 \begin_layout Subsubsection*
 Explain the Fast-R-CNN method:
 \end_layout
 
-\begin_layout Enumerate
-Whole image through ConvNet.
+\begin_layout Standard
+Training:
 \end_layout
 
 \begin_layout Enumerate
-Use the features + region proposal method to generate proposals.
+Obtain a feature extractor network, which can also classify images (AlexNet
+ + fine-tune for example)
 \end_layout
 
 \begin_layout Enumerate
-RoI pooling (anything special about this????)
+Per image in training dataset:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Run ROI algorithm on image to obtain BBOX.
 \end_layout
 
 \begin_layout Enumerate
-FCs
+Feedforward image through first 
+\begin_inset Formula $n$
+\end_inset
+
+ layers of network.
+ Per RoI:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Project RoI onto this representation.
 \end_layout
 
 \begin_layout Enumerate
-SoftMax (log loss) + SVM for classification.
- Reg for BBox (smooth L1 Loss)
+Warp RoI - divide into 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ grid and max pool each part.
 \end_layout
 
+\begin_layout Enumerate
+Feedforward this warped RoI through FC layers to obtain features.
+ Save in large dataset of 
+\begin_inset Formula 
+\begin{align*}
+x & =\left(\text{feature},\text{RoI BBOX}\right)\\
+y & =\left(\text{is object},\text{real BBOX}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Backprop through: Train classification w/Softmax + linear regression w/Smooth
+ L1 loss
+\end_layout
+
+\begin_layout Standard
+Test:
+\end_layout
+
+\begin_layout Enumerate
+Run image through RoI algorithm
+\end_layout
+
+\begin_layout Enumerate
+Feedforward image through first 
+\begin_inset Formula $n$
+\end_inset
+
+ layers of network.
+ Per RoI:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Project RoI onto this representation.
+\end_layout
+
+\begin_layout Enumerate
+Warp RoI - divide into 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ grid and max pool each part.
+\end_layout
+
+\begin_layout Enumerate
+Feedforward this warped RoI through FC layers to obtain features.
+ Per tuple of 
+\begin_inset Formula 
+\begin{align*}
+x & =\left(\text{feature},\text{RoI BBOX}\right)\\
+y & =\left(\text{is object},\text{real BBOX}\right)
+\end{align*}
+
+\end_inset
+
+ Predict true BBOX + presence of object.
+\end_layout
+
+\end_deeper
 \begin_layout Subsubsection*
 Write down the smooth 
 \begin_inset Formula $L_{1}$
@@ -2713,7 +2861,8 @@ What is the difference between the Fast R-CNN and the Faster R-CNN?
 
 \begin_layout Standard
 Faster has an additional Region Proposal Network before the RoI pooling
- (two more losses, in total 4).
+ (two more losses - classification obj/not obj + bbox smooth L1, in total
+ 4).
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2729,7 +2878,7 @@ What is YOLO/SSD?
 \end_layout
 
 \begin_layout Standard
-You only look once, single shot detection.
+You only look once, single shot multibox detection.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2746,15 +2895,35 @@ Divide image into a
 \begin_inset Formula $C$
 \end_inset
 
- classes and regress to 
+ classes and regress from each of 
 \begin_inset Formula $B$
 \end_inset
 
- boxes - 
+ base boxes - to final box: 
 \begin_inset Formula $(x,y,w,h,\text{confidence})$
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsubsection*
+You need to design an object detection network, speed is crucial accuracy
+ not so much.
+ Which architecture?
+\end_layout
+
+\begin_layout Standard
+SSD
+\end_layout
+
+\begin_layout Subsubsection*
+You need to design an object detection network, accuracy is crucial speed
+ not so much.
+ Which architecture?
+\end_layout
+
+\begin_layout Standard
+Faster R-CNN
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2851,11 +3020,13 @@ Generate an entire picture via 1D distributions:
 
 \end_inset
 
- Each 
+Each 
 \begin_inset Formula $p$
 \end_inset
 
- is expressed via NN
+ is expressed via NN.
+ Optimization via Maximum Likelihood estimation on training data.
+ Softmax loss on distribution outputed by NN.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2864,7 +3035,7 @@ Describe the PixelRNN
 
 \begin_layout Standard
 Generate image starting from corner.
- Spatial LSTM
+ Spatial LSTM.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2873,6 +3044,7 @@ DrawBack?
 
 \begin_layout Standard
 Slow.
+ Must work sequentially in training.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2885,12 +3057,23 @@ Row by row, pixel by pixel.
 \end_layout
 
 \begin_layout Subsubsection*
-Which is faster?
+Which is faster? State 2 reasons.
 \end_layout
 
 \begin_layout Standard
-PixelCNN - bound yourself to a smaller context region + something about
- parellilzation??S??
+PixelCNN:
+\end_layout
+
+\begin_layout Enumerate
+Bound yourself to a smaller context region (no entire top-left hand part
+ of image).
+\end_layout
+
+\begin_layout Enumerate
+Can parralelize training (but not generation)! In the LSTM version we get
+ a hidden state based on all previous images.
+ In the PixelCNN version we can choose any pixel and use the context from
+ it's surrounding in the training image.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -2902,7 +3085,7 @@ Explicitly compute
 \begin_inset Formula $p\left(x\right)$
 \end_inset
 
-
+ (how exactly?)
 \end_layout
 
 \begin_layout Enumerate
@@ -2982,7 +3165,37 @@ p_{\theta^{*}}\left(x|z\right)
 \end_layout
 
 \begin_layout Subsubsection*
-Q
+How do we usually represent 
+\begin_inset Formula $p_{\theta^{*}}\left(z\right)$
+\end_inset
+
+, and why?
+\end_layout
+
+\begin_layout Standard
+A simple distribution, say Gaussian.
+ It is reasonable to assume that the latent variables are distributed such
+ (cat images - size of cat in image, pose, head rotation etc.).
+\end_layout
+
+\begin_layout Subsubsection*
+How can we make independent features?
+\end_layout
+
+\begin_layout Standard
+Diagonal 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+State the function for expressing likelihood of sample 
+\begin_inset Formula $x$
+\end_inset
+
+, in the latent variable setting:
 \end_layout
 
 \begin_layout Standard
@@ -2992,16 +3205,221 @@ Q
 
 \end_layout
 
+\begin_layout Subsubsection*
+What is the problem with trying to compute 
+\begin_inset Formula $\theta$
+\end_inset
+
+ which maximizes likelihood in this setting?
+\end_layout
+
 \begin_layout Standard
-A
+Intractable, no way we can optimize for all 
+\begin_inset Formula $z$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection*
-Q
+The solution involves using an encoder and decoder network, state what they
+ compute:
 \end_layout
 
 \begin_layout Standard
-A
+Encoder network computes traits of the distribution of 
+\begin_inset Formula $z$
+\end_inset
+
+ given 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Density function expressed as:
+\begin_inset Formula $q_{\phi}\left(z|x\right)$
+\end_inset
+
+.
+ Samples:
+\begin_inset Formula 
+\[
+z|x\sim\mathcal{N}\left(\mu_{z|x},\Sigma_{z|x}\right)
+\]
+
+\end_inset
+
+Decoder network computes traits of the distribution of 
+\begin_inset Formula $x$
+\end_inset
+
+ given 
+\begin_inset Formula $z$
+\end_inset
+
+.
+ Density function expressed as:
+\begin_inset Formula $p_{\theta}\left(x|z\right)$
+\end_inset
+
+.
+ Samples:
+\begin_inset Formula 
+\[
+x|z\sim\mathcal{N}\left(\mu_{x|z},\Sigma_{x|z}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is ELBO?
+\end_layout
+
+\begin_layout Standard
+Evidence lower bound.
+ It is a lower bound on the likelihood of our training data given paramaters
+ 
+\begin_inset Formula $\theta,\phi$
+\end_inset
+
+ of our network.
+ We optimize 
+\begin_inset Formula $\theta,\phi$
+\end_inset
+
+ such that this lower bound is maximized.
+\end_layout
+
+\begin_layout Subsubsection*
+State the KL divergence of two distributions 
+\begin_inset Formula $P,Q$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+D_{KL}\left(P||Q\right) & =\Sigma_{x\in X}P\left(x\right)\log\left(\frac{P\left(x\right)}{Q(x)}\right)=-\Sigma_{x\in X}P\left(x\right)\log\left(\frac{Q\left(x\right)}{P(x)}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Develop the ELBO expression:
+\end_layout
+
+\begin_layout Standard
+For some sample 
+\begin_inset Formula $x$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\log\left(p_{\theta}\left(x\right)\right) & =\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(p_{\theta}\left(x\right)\right)\right]
+\end{align*}
+
+\end_inset
+
+ True for any pair of random variables which do not depend on eachother.
+ Now we use bayes' to express 
+\begin_inset Formula $p_{\theta}\left(x\right)$
+\end_inset
+
+ differently:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+p_{\theta}\left(x\right) & =\frac{p_{\theta}\left(x\wedge z\right)}{\frac{p_{\theta}\left(x\wedge z\right)}{p_{\theta}\left(x\right)}}\\
+ & =\frac{p_{\theta}\left(z\right)\cdot p_{\theta}\left(x|z\right)}{p_{\theta}\left(z|x\right)}
+\end{align*}
+
+\end_inset
+
+ Let's resume developing the lower bound:
+\begin_inset Formula 
+\begin{align*}
+\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(p_{\theta}\left(x\right)\right)\right] & =\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(\frac{p_{\theta}\left(z\right)\cdot p_{\theta}\left(x|z\right)}{p_{\theta}\left(z|x\right)}\right)\right]\\
+ & =\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(\frac{p_{\theta}\left(z\right)\cdot p_{\theta}\left(x|z\right)}{p_{\theta}\left(z|x\right)}\frac{q_{\phi}\left(z|x\right)}{q_{\phi}\left(z|x\right)}\right)\right]\\
+ & =\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(p_{\theta}\left(x|z\right)\right)-\log\left(\frac{q_{\phi}\left(z|x\right)}{p_{\theta}\left(z\right)}\right)+\log\left(\frac{q_{\phi}\left(z|x\right)}{p_{\theta}\left(z|x\right)}\right)\right]\\
+ & =\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(p_{\theta}\left(x|z\right)\right)\right]-\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(\frac{q_{\phi}\left(z|x\right)}{p_{\theta}\left(z\right)}\right)\right]+\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(\frac{q_{\phi}\left(z|x\right)}{p_{\theta}\left(z|x\right)}\right)\right]\\
+ & =\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(p_{\theta}\left(x|z\right)\right)\right]-D_{KL}\left(q_{\phi}\left(z|x\right)||p_{\theta}\left(z\right)\right)+D_{KL}\left(q_{\phi}\left(z|x\right)||p_{\theta}\left(z|x\right)\right)\\
+ & \geq\mathbb{E}_{z\sim q_{\phi}\left(z|x\right)}\left[\log\left(p_{\theta}\left(x|z\right)\right)\right]-D_{KL}\left(q_{\phi}\left(z|x\right)||p_{\theta}\left(z\right)\right)\\
+ & :=\mathcal{L}\left(x,\theta,\phi\right)
+\end{align*}
+
+\end_inset
+
+Last inequality because 
+\begin_inset Formula $D_{KL}\geq0$
+\end_inset
+
+ always.
+\end_layout
+
+\begin_layout Subsubsection*
+State the optimization objective of training a VAE using the above:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\theta^{*},\phi^{*} & =\arg\underset{\theta,\phi}{\max}\sum_{i=1}^{N}\mathcal{L}\left(x^{\left(i\right)},\theta,\phi\right)
+\end{align*}
+
+\end_inset
+
+ This term is differentiable!
+\end_layout
+
+\begin_layout Subsubsection*
+State 2 pros and 2 cons of VAEs:
+\end_layout
+
+\begin_layout Standard
+Pros:
+\end_layout
+
+\begin_layout Enumerate
+Principled approach to generation
+\end_layout
+
+\begin_layout Enumerate
+Get a feature extractor on the way
+\end_layout
+
+\begin_layout Standard
+Cons:
+\end_layout
+
+\begin_layout Enumerate
+Maximize a lower bound..
+\end_layout
+
+\begin_layout Enumerate
+Generally blurrier and lower quality images than GANs, which are state of
+ the art.
+\end_layout
+
+\begin_layout Subsubsection*
+Why are they called Variational Autoencoders?
+\end_layout
+
+\begin_layout Standard
+Still don't know.
 \end_layout
 
 \begin_layout Standard
@@ -3097,11 +3515,11 @@ and the functions
 \end_layout
 
 \begin_layout Subsubsection*
-Desribe to first attempt for such assumption.
+Desribe to first attempt for such assumption:
 \end_layout
 
 \begin_layout Subsubsection*
-(What is the total variation distance?)
+What is the total variation distance?
 \end_layout
 
 \begin_layout Standard
@@ -3209,15 +3627,15 @@ State the disadvantages of the theorem (Ben-David et al.
 
 \begin_layout Subsubsection*
 Desribe the second attempt for an assumption on the relationship between
- the source and the target domains.
+ the source and the target domains:
 \end_layout
 
 \begin_layout Subsubsection*
-(What is the 
+What is the 
 \begin_inset Formula $C$
 \end_inset
 
--divergence?)
+-divergence?
 \end_layout
 
 \begin_layout Standard
@@ -3305,12 +3723,53 @@ where:
 \end_layout
 
 \begin_layout Subsubsection*
+What is the triangle inequality for classification error?
+\end_layout
+
+\begin_layout Standard
+for any labeling function 
+\begin_inset Formula $f_{1},f_{2},f_{3}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D}[f_{1},f_{2}]\leq R_{D}[f_{1},f_{3}]+R_{D}[f_{2},f_{3}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
 Proof Theorem 2 (Ben-David et al.
  2010).
 \end_layout
 
 \begin_layout Standard
-The triangle inequality for classifiction error
+We start with the triangle inequality for 
+\begin_inset Formula $h,y_{t},h^{*}:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{T}}[h,y_{T}]\leq R_{D_{T}}[h,h^{*}]+R_{D_{T}}[h^{*},y_{T}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{T}}[h,y_{T}]\leq R_{D_{T}}[h,h^{*}]+R_{D_{T}}[h^{*},y_{T}]+(R_{D_{S}}[h,h^{*}]-R_{D_{S}}[h,h^{*}])$
+\end_inset
+
+
 \end_layout
 
 \end_body
