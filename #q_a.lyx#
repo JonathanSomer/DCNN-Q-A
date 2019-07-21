@@ -3762,14 +3762,892 @@ We start with the triangle inequality for
 \end_layout
 
 \begin_layout Standard
+We'll devolpe the only RHS:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{T}}[h,h^{*}]+R_{D_{T}}[h^{*},y_{T}]=R_{D_{T}}[h,h^{*}]+R_{D_{T}}[h^{*},y_{T}]+(R_{D_{S}}[h,h^{*}]-R_{D_{S}}[h,h^{*}])$
+\end_inset
+
 
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $R_{D_{T}}[h,y_{T}]\leq R_{D_{T}}[h,h^{*}]+R_{D_{T}}[h^{*},y_{T}]+(R_{D_{S}}[h,h^{*}]-R_{D_{S}}[h,h^{*}])$
+\begin_inset Formula $=R_{D_{T}}[h,h^{*}]+R_{D_{T}}[h^{*},y_{T}]+(R_{D_{S}}[h,h^{*}]-R_{D_{S}}[h,h^{*}])$
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\leq R_{D_{S}}[h,h^{*}]+|R_{D_{T}}[h,h^{*}]-R_{D_{S}}[h,h^{*}]|+R_{D_{T}}[h^{*},y_{T}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We'll observe for now only the expressions in the absolute value 
+\begin_inset Formula $|R_{D_{T}}[h,h^{*}]-R_{D_{S}}[h,h^{*}]|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recall that by definition and expected value of bernoulli variable it holds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D}[f_{1},f_{2}]=\mathbb{E}_{D}[I[f_{1}(x)\neq f_{2}(x)]]=\mathbb{P}_{D}[I[f_{1}(x)\neq f_{2}(x)]]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Addtionly it holds that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I[f_{1}(x)\neq f_{2}(x)]=[f_{1}\,xor\,f_{2}(x)=1]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now well use this on the expressions in the absolute value taking 
+\begin_inset Formula $f_{1}=h,f_{2}h^{*}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $|R_{D_{T}}[h,h^{*}]-R_{D_{S}}[h,h^{*}]|=|\mathbb{P}_{D_{T}}[h\,xor\,h^{*}(x)=1]-\mathbb{P}_{D_{S}}[h\,xor\,h^{*}(x)=1]|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can take the supremum on all possibe 
+\begin_inset Formula $h\,xor\,h^{*}=H\Delta H$
+\end_inset
+
+ as an upper bound:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $|\mathbb{P}_{D_{T}}[h\,xor\,h^{*}(x)=1]-\mathbb{P}_{D_{S}}[h\,xor\,h^{*}(x)=1]|\leq sup_{c\in H\Delta H}|\mathbb{P}_{D_{T}}[I(c)]-\mathbb{P}_{D_{S}}[I(c)]|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And this was defined eariler as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})=sup_{c\in H\Delta H}|\mathbb{P}_{D_{T}}[I(c)]-\mathbb{P}_{D_{S}}[I(c)]|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+putting in all togather in original RHS:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{S}}[h,h^{*}]+|R_{D_{T}}[h,h^{*}]-R_{D_{S}}[h,h^{*}]|+R_{D_{T}}[h^{*},y_{T}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\leq R_{D_{S}}[h,h^{*}]+d_{H\Delta H}(D_{S},D_{T})+R_{D_{T}}[h^{*},y_{T}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\leq R_{D_{S}}[h,h^{*}]+d_{H\Delta H}(D_{S},D_{T})+R_{D_{T}}[h^{*},y_{T}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Again using the triangle inequality it holds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{S}}[h,h^{*}]\leq R_{D_{S}}[h,y_{S}]+R_{D_{S}}[h^{*},y_{S}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+so we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{S}}[h,h^{*}]+d_{H\Delta H}(D_{S},D_{T})+R_{D_{T}}[h^{*},y_{T}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\leq R_{D_{S}}[h,y_{S}]+d_{H\Delta H}(D_{S},D_{T})+R_{D_{T}}[h^{*},y_{T}]+R_{D_{S}}[h^{*},y_{S}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=R_{D_{S}}[h,y_{S}]+d_{H\Delta H}(D_{S},D_{T})+\lambda$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Q.E.D
+\end_layout
+
+\begin_layout Subsubsection*
+State the advantages of theorem2 (Ben-David et al.
+ 2010)
+\end_layout
+
+\begin_layout Standard
+1.
+ The 
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})$
+\end_inset
+
+ measure is potentially smaller.
+\end_layout
+
+\begin_layout Standard
+2.
+ It can be estimated using samples from 
+\begin_inset Formula $D_{S},D_{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Prove that the 
+\begin_inset Formula $C$
+\end_inset
+
+-divergence 
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})$
+\end_inset
+
+ measure is no larger than total variation distance 
+\begin_inset Formula $d_{TV}(D_{S},D_{T})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})=2sup_{c\in C}|\mathbb{P}_{D_{T}}[I(c)]-\mathbb{P}_{D_{S}}[I(c)]|\leq2sup_{A\in M}|\mathbb{P}_{D_{T}}[I(A)]-\mathbb{P}_{D_{S}}[I(A)]|=d_{TV}(D_{S},D_{T})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the maximal gap between them?
+\end_layout
+
+\begin_layout Standard
+The maximal gap is 2 (
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})=0$
+\end_inset
+
+, 
+\begin_inset Formula $d_{TV}(D_{S},D_{T})=2$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsubsection*
+Desribe a scenario in which it happens
+\end_layout
+
+\begin_layout Standard
+This happens in a scenario where 
+\begin_inset Formula $D_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $D_{T}$
+\end_inset
+
+are over disjoint sets and any discriminator 
+\begin_inset Formula $c\in H\Delta H$
+\end_inset
+
+ cannot distinguish between them.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $D_{S}=\{x_{1},x_{2},x_{3}\}$
+\end_inset
+
+ 
+\begin_inset Formula $D_{T}=\{y_{1},y_{2},y_{3}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{TV}(D_{S},D_{T})=2sup_{A\in M}|\mathbb{P}_{D_{T}}[I(A)]-\mathbb{P}_{D_{S}}[I(A)]|=2\cdot(1-0)=2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for 
+\begin_inset Formula $A=\{x_{1},x_{2},x_{3}\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+And since any discriminator 
+\begin_inset Formula $c\in H\Delta H$
+\end_inset
+
+ cannot distinguish between them it holds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $|I(c)\cap\{x_{1},x_{2},x_{3}\}|=|I(c)\cap\{y_{1},y_{2},y_{3}\}|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So assuming 
+\begin_inset Formula $D_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $D_{T}$
+\end_inset
+
+ are uniform distributions we have for all 
+\begin_inset Formula $c\in C$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathbb{P}_{D_{S}}[I(c)]=\frac{|I(c)\cap\{x_{1},x_{2},x_{3}\}|}{3}=\frac{|I(c)\cap\{y_{1},y_{2},y_{3}\}|}{3}=\mathbb{P}_{D_{T}}[I(c)]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+so
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})=2sup_{c\in C}|\mathbb{P}_{D_{T}}[I(c)]-\mathbb{P}_{D_{S}}[I(c)]|=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+How can the 
+\begin_inset Formula $C$
+\end_inset
+
+-divergence be estimated?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{H\Delta H}(D_{S},D_{T})\approx d_{H\Delta H}(S_{1},S_{2})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for two sets of samples 
+\begin_inset Formula $S_{1}\sim D_{S}^{m}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}\sim D_{T}^{m}$
+\end_inset
+
+ with large enough 
+\begin_inset Formula $m$
+\end_inset
+
+ and depnding on 
+\begin_inset Formula $H$
+\end_inset
+
+'s 
+\begin_inset Formula $VC$
+\end_inset
+
+ dimension.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the Lemma for the 
+\begin_inset Formula $C$
+\end_inset
+
+-divergence estimation?
+\end_layout
+
+\begin_layout Standard
+For a symmetric hypothesis class 
+\begin_inset Formula $C$
+\end_inset
+
+ (one where for every 
+\begin_inset Formula $c∈C$
+\end_inset
+
+, the inverse hypothesis 
+\begin_inset Formula $1−c$
+\end_inset
+
+ is also in 
+\begin_inset Formula $C$
+\end_inset
+
+) and samples 
+\begin_inset Formula $S_{1},S_{2}$
+\end_inset
+
+ of size 
+\begin_inset Formula $m$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{C}(S_{1},S_{2})=2(1-min_{c\in C}[\frac{1}{m}\Sigma_{x\in S_{1}}I[c(x)=0]+\frac{1}{m}\Sigma_{x\in S_{2}}I[c(x)=1]])$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the procedure for computing the C-divergence with this Lemma?
+\end_layout
+
+\begin_layout Standard
+We find a function in C that has minimum error for the binary classification
+ problem of distinguishing source from target instances.
+ meaning finding 
+\begin_inset Formula $c$
+\end_inset
+
+ that minimize:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $min_{c\in C}[\frac{1}{m}\Sigma_{x\in S_{1}}I[c(x)=0]+\frac{1}{m}\Sigma_{x\in S_{2}}I[c(x)=1]]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Reminds you of something?
+\end_layout
+
+\begin_layout Standard
+GAN
+\end_layout
+
+\begin_layout Standard
+But this is not the “full GAN“ yet, it's just the discriminator.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $max_{D}[\frac{1}{m}\Sigma_{x\in S_{1}}log(D(x))+\frac{1}{m}\Sigma_{x\in S_{2}}log(1-D(x))]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What assumption did we make on the two domains that we can maybe drop?
+\end_layout
+
+\begin_layout Standard
+That the two domains are close to each other.
+\end_layout
+
+\begin_layout Subsubsection*
+What can we use to drop that assumption?
+\end_layout
+
+\begin_layout Standard
+Use unlabeled samples from the target domain to assume 
+\begin_inset Formula $D_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $D_{T}$
+\end_inset
+
+ not close by distance, but share “common characteristics“.
+\end_layout
+
+\begin_layout Subsubsection*
+What can we assume to say they common characteristics?
+\end_layout
+
+\begin_layout Standard
+Namly assume that there exists a function 
+\begin_inset Formula $f$
+\end_inset
+
+ that maps 
+\begin_inset Formula $D_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $D_{T}$
+\end_inset
+
+ to a features space in which they behave similarly:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f\circ D_{S}\approx f\circ D_{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For instance, for the daylight and sunset domains (dolphins), 
+\begin_inset Formula $f(x)$
+\end_inset
+
+ can take an image and keep all of its features except the brightness.
+\end_layout
+
+\begin_layout Subsubsection*
+How would the learned classifier 
+\begin_inset Formula $h$
+\end_inset
+
+ would like?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $h=g\circ f$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $f$
+\end_inset
+
+ is representation - the first layers of a neural network.
+ 
+\end_layout
+
+\begin_layout Standard
+And 
+\begin_inset Formula $g$
+\end_inset
+
+ is classification - - the last few layers of the neural network.
+\end_layout
+
+\begin_layout Subsubsection*
+What is Theorem 3 (Ben-David et al.
+ 2010)?
+\end_layout
+
+\begin_layout Standard
+for any 
+\begin_inset Formula $g\in G$
+\end_inset
+
+ and 
+\begin_inset Formula $f\in F$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{D_{T}}[\text{\ensuremath{g\circ f}},y_{T}]\leq R_{D_{S}}[g\circ f,y_{S}]+d_{G\Delta G}(f\circ D_{S},f\circ D_{T})+\lambda_{f}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\lambda_{f}=min_{g\in G}\{R_{D_{S}}[g\circ f,y_{S}]+R_{D_{T}}[\text{\ensuremath{g\circ f}},y_{T}]\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What can we say when comparing the third 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ term in theorm2 and theorm3?
+\end_layout
+
+\begin_layout Standard
+We assume in both cases that it's small, but in theorm3 the assumption is
+ more restrictive, since we assume that the learned representation f is
+ “good“.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the objective function for an algorithm for domain adaptation?
+\end_layout
+
+\begin_layout Standard
+Minimizing 
+\begin_inset Formula $R_{D_{S}}[g\circ f,y_{S}]+d_{G\Delta G}(f\circ D_{S},f\circ D_{T})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+formally, for unlabed target data 
+\begin_inset Formula $\{x_{i}\}_{i=1}^{m}$
+\end_inset
+
+ and labeled source data 
+\begin_inset Formula $\{(\hat{x_{i}},y_{S}(\hat{x_{i}}))\}_{i=1}^{m}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $min_{f\in F,g\in G}\frac{1}{m}\Sigma_{i=1}^{m}I[g\circ f(\hat{x_{i}})=y_{S}(\hat{x_{i})}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $+2(1-min_{c\in G\Delta G}[\frac{1}{m}\Sigma_{i=1}^{m}I[c(f(\hat{x_{i}}))=0]+\frac{1}{m}\Sigma_{i=1}^{m}I[c(f(x))=1]])$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+How can we make our objective both generic and differentiable?
+\end_layout
+
+\begin_layout Standard
+1.
+ Break the objective into two separate losses.
+\end_layout
+
+\begin_layout Standard
+2.
+ Replace 
+\begin_inset Formula $G∆G$
+\end_inset
+
+ with a generic set of discriminators C that return a value in [0, 1].
+\end_layout
+
+\begin_layout Standard
+3.
+ Replace the loss with the CE loss
+\end_layout
+
+\begin_layout Subsubsection*
+Rewrite our objective in the generic and differentiable form
+\end_layout
+
+\begin_layout Standard
+Source training error:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $min_{f\in F,g\in G}\frac{1}{m}\Sigma_{i=1}^{m}loss(g\circ f(\hat{x_{i}}),y_{S}(\hat{x_{i})})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Domain confusion:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $max_{f\in F}min_{c\in C}[\frac{1}{m}\Sigma_{i=1}^{m}loss(c(f(\hat{x_{i}})),0)+\frac{1}{m}\Sigma_{i=1}^{m}loss(c(f(x))=1)]$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+The second term reminds you of something?
+\end_layout
+
+\begin_layout Standard
+This is a GAN in the latent space.
+\end_layout
+
+\begin_layout Subsubsection*
+How can we optimize the objective?
+\end_layout
+
+\begin_layout Standard
+Apply Backpropagation in 3 neural network, one for each function to be optimize:
+ 
+\begin_inset Formula $f,g,c$
+\end_inset
+
+.
+ we'll denote each network parameters 
+\begin_inset Formula $\theta_{f},\theta_{g},\theta_{c}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the gradient step for 
+\begin_inset Formula $\theta_{g}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\theta_{g}\leftarrow\theta_{g}-\mu_{1}\frac{1}{m}\Sigma_{i=1}^{m}\frac{\nabla_{\theta_{g}}loss(g\circ f(\hat{x_{i}}),y_{S}(\hat{x_{i}}))}{\theta_{g}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the gradient step for 
+\begin_inset Formula $\theta_{c}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\theta_{c}\leftarrow\theta_{c}-\mu_{2}[\frac{1}{m}\Sigma_{i=1}^{m}\frac{\nabla_{\theta_{c}}loss(c(f(\hat{x_{i}}),0)}{\theta_{c}}+\frac{1}{m}\Sigma_{i=1}^{m}\frac{\nabla_{\theta_{c}}loss(c(f(x_{i}),1)}{\theta_{c}}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the gradient step for 
+\begin_inset Formula $\theta_{f}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+It has two steps.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\theta_{f}\leftarrow\theta_{f}-\mu_{3}\frac{1}{m}\Sigma_{i=1}^{m}\frac{\nabla_{\theta_{f}}loss(g\circ f(\hat{x_{i}}),y_{S}(\hat{x_{i}}))}{\theta_{f}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\theta_{f}\leftarrow\theta_{c}\boldsymbol{+}\mu_{4}[\frac{1}{m}\Sigma_{i=1}^{m}\frac{\nabla_{\theta_{c}}loss(c(f(\hat{x_{i}}),0)}{\theta_{c}}+\frac{1}{m}\Sigma_{i=1}^{m}\frac{\nabla_{\theta_{c}}loss(c(f(x_{i}),1)}{\theta_{c}}]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the problem with the relationship between 
+\begin_inset Formula $f$
+\end_inset
+
+ and 
+\begin_inset Formula $c$
+\end_inset
+
+ in the current optimization method?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f$
+\end_inset
+
+ can fool 
+\begin_inset Formula $c$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+too much
+\begin_inset Quotes erd
+\end_inset
+
+ and overkill 
+\begin_inset Formula $c$
+\end_inset
+
+ by making 
+\begin_inset Formula $c$
+\end_inset
+
+ predict 0 for all 
+\begin_inset Formula $f(x_{i})$
+\end_inset
+
+ and 1 for every 
+\begin_inset Formula $f(\hat{x_{i}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What can 
+\begin_inset Formula $c$
+\end_inset
+
+ do in such a case in the currect optimization method?
+\end_layout
+
+\begin_layout Standard
+Flip its prediction.
+\end_layout
+
+\begin_layout Subsubsection*
+What can be done to avoid this problem?
+\end_layout
+
+\begin_layout Standard
+change the optimization of 
+\begin_inset Formula $f$
+\end_inset
+
+ 
 \end_layout
 
 \end_body
