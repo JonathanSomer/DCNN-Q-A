@@ -114,6 +114,324 @@ the fire channel
 \end_layout
 
 \begin_layout Section*
+Week 1
+\end_layout
+
+\begin_layout Subsubsection*
+What are the inclusion relations between: AI, deep learning, machine learning
+ and represntation learning?
+\end_layout
+
+\begin_layout Standard
+Deep learning 
+\begin_inset Formula $\subset$
+\end_inset
+
+ represntation learning 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\subset$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ machine learning 
+\begin_inset Formula $\subset$
+\end_inset
+
+AI
+\end_layout
+
+\begin_layout Subsubsection*
+What are the main problems in image classification?
+\end_layout
+
+\begin_layout Standard
+Semantic gap (the computer sees only numbers in a grid), viewpoint variation,
+ illumination, interclass variation, background clutter, occlusion (when
+ an object is partly hidden)
+\end_layout
+
+\begin_layout Subsubsection*
+Define nearest neighbor refering to training and predition.
+\end_layout
+
+\begin_layout Standard
+Train - memorize all data and labels.
+\end_layout
+
+\begin_layout Standard
+Predict - according to the most similar training image.
+\end_layout
+
+\begin_layout Subsubsection*
+Define L1 distance for images.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{1}(I_{1},I_{2})=\Sigma_{P}|I_{1}^{P}-I_{2}^{P}|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $P$
+\end_inset
+
+ is pixel
+\end_layout
+
+\begin_layout Subsubsection*
+Define L2 distance for images.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $d_{2}(I_{1},I_{2})=\sqrt{\Sigma_{P}(I_{1}^{P}-I_{2}^{P})^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $P$
+\end_inset
+
+ is pixel
+\end_layout
+
+\begin_layout Subsubsection*
+With 
+\begin_inset Formula $n$
+\end_inset
+
+ examples what is the complexity of training and prediction?
+\end_layout
+
+\begin_layout Standard
+Train 
+\begin_inset Formula $O(1)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Predict 
+\begin_inset Formula $O(N)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Why is this bad?
+\end_layout
+
+\begin_layout Standard
+We want fast prediction, don't mind slow training.
+\end_layout
+
+\begin_layout Subsubsection*
+Define K-nearest neighbor
+\end_layout
+
+\begin_layout Standard
+Same as nearest neighbor only with majority vote from the K-nearestes images.
+\end_layout
+
+\begin_layout Subsubsection*
+What are hyperparameters?
+\end_layout
+
+\begin_layout Standard
+Choices about the algorithm that we set and not learned.
+\end_layout
+
+\begin_layout Subsubsection*
+Why use validation dataset?
+\end_layout
+
+\begin_layout Standard
+To choose hyperparameters (train for learning, test for testing).
+\end_layout
+
+\begin_layout Subsubsection*
+What is cross-validation?
+\end_layout
+
+\begin_layout Standard
+Split train data into folds, try each fold as validation (rest as train)
+ and average the result.
+\end_layout
+
+\begin_layout Subsubsection*
+Why K-nearest neighbor is never used on images?
+\end_layout
+
+\begin_layout Standard
+1.
+ Slow in test
+\end_layout
+
+\begin_layout Standard
+2.
+ Distance matrics on pixels are not informative
+\end_layout
+
+\begin_layout Section*
+Week 2
+\end_layout
+
+\begin_layout Subsubsection*
+What does it mean to assume i.d.d on a dataset?
+\end_layout
+
+\begin_layout Standard
+Identically distributed - all of the samples are taken from same distrubtion
+ D.
+\end_layout
+
+\begin_layout Standard
+Independently distributed - 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ ∼ D is independent of 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+ ∼ D
+\end_layout
+
+\begin_layout Subsubsection*
+Why do we need to assume i.d.d on a dataset?
+\end_layout
+
+\begin_layout Standard
+Identically distributed - to know that all of the samples are from the same
+ domain.
+ 
+\end_layout
+
+\begin_layout Standard
+Independently distributed - It is unrealistic to say that the second image
+ in the training set depends on the tenth image of the training set.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the generalization error of learned function 
+\begin_inset Formula $f$
+\end_inset
+
+, target function 
+\begin_inset Formula $y$
+\end_inset
+
+ on distribution 
+\begin_inset Formula $D$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $L_{D}[f,y]=\mathbb{E}_{x\sim D}[loss(f(x),y(x))]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 1-0 loss:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\mathbb{E}_{x\sim D}[Indicator(f(x)\neq y(x))]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Calculate:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ‏‏gen_err.PNG
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+slide 35 
+\begin_inset Quotes eld
+\end_inset
+
+Lecture 2 - Intro to ML
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+How does machine learning differs from optimization?
+\end_layout
+
+\begin_layout Standard
+In ML we want the generalization error to be low as well as the training
+ error, treating ML problem as an optimization problem would lead to overfitting.
+\end_layout
+
+\begin_layout Subsubsection*
+How can we control whether an algorithm is more likely to overfit or underfit?
+\end_layout
+
+\begin_layout Standard
+By altering its capacity - it's ability to fit a wide variety of functions.
+\end_layout
+
+\begin_layout Standard
+Algorithms with low capacity may struggle to fit the training set.
+ Algorithms with high capacity can overfit by memorizing properties of the
+ training set that do not serve them well on the test set.
+\end_layout
+
+\begin_layout Subsubsection*
+How can we control an algorithm capacity?
+\end_layout
+
+\begin_layout Standard
+One way is to choose it's hypothesis space.
+\end_layout
+
+\begin_layout Section*
 Week 7
 \end_layout
 
