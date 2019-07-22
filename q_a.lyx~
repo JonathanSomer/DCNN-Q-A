@@ -301,6 +301,10 @@ Why K-nearest neighbor is never used on images?
  Distance matrics on pixels are not informative
 \end_layout
 
+\begin_layout Section*
+Week 2
+\end_layout
+
 \begin_layout Subsubsection*
 What does it mean to assume i.d.d on a dataset?
 \end_layout
@@ -425,6 +429,473 @@ How can we control an algorithm capacity?
 
 \begin_layout Standard
 One way is to choose it's hypothesis space.
+\end_layout
+
+\begin_layout Section*
+Week 6a - Neural Networks in Practice
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the multiclass SVM loss:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $L\left(f\left(x_{i}\right),y_{i}\right)=\sum_{j\neq y_{i}}\max\left(0,\left(f\left(x_{i}\right)_{j}+1\right)-f\left(x_{i}\right)_{y_{i}}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+In the multiclass SVM loss, what is the minimum achievable loss?
+\end_layout
+
+\begin_layout Standard
+0
+\end_layout
+
+\begin_layout Subsubsection*
+In the multiclass SVM loss, what is the maximum achievable loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $+\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the initial loss, when 
+\begin_inset Formula $W$
+\end_inset
+
+ is set to small values, 
+\begin_inset Formula $s\approx0$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $c-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the elastic net regularization method?
+\end_layout
+
+\begin_layout Standard
+weighted sum of 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Develop the softmax classifier loss (multinomial logistic regression?):
+\end_layout
+
+\begin_layout Enumerate
+Our neural network outputs the final activations, called - logits, unnormalized
+ log-probabilities: 
+\begin_inset Formula 
+\[
+s
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+We raise them to the exponent so we have positive values 
+\begin_inset Formula 
+\[
+e^{s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+We normalize the values in order to get a distribution:
+\begin_inset Formula 
+\[
+\hat{P}_{i}=P\left(Y=k|X=x_{i}\right)=\frac{e^{s_{k}}}{\sum_{j=1}^{k}e^{s_{j}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Our loss is the KL divergence between this distribution and the 
+\begin_inset Quotes eld
+\end_inset
+
+indicator distribution for class 
+\begin_inset Formula $k$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+P_{i}=P\left(Y=c|X=x_{i}\right)=\begin{cases}
+1 & c=k\\
+0 & \text{else}
+\end{cases}
+\]
+
+\end_inset
+
+ The KL divergence is:
+\begin_inset Formula 
+\begin{align*}
+KL\left(\hat{P}_{i}\|P_{i}\right) & =\sum_{c=1}^{C}P_{i}\left(c\right)\log\left(\frac{P_{i}\left(c\right)}{\hat{P}_{i}\left(c\right)}\right)\\
+ & =P_{i}\left(y_{i}\right)\log\left(\frac{P_{i}\left(y_{i}\right)}{\hat{P}_{i}\left(y_{i}\right)}\right)\\
+ & =1\cdot\log\left(\frac{1}{\hat{P}_{i}\left(y_{i}\right)}\right)\\
+ & =-\log\left(\hat{P}_{i}\left(y_{i}\right)\right)\\
+ & =-\log\left(\frac{e^{s_{y_{i}}}}{\sum_{j=1}^{k}e^{s_{j}}}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the minimal loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the maximal loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+At initialization all scores are approximately equal, what is the loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $-\log\left(\frac{e^{s_{y_{i}}}}{\sum_{j=1}^{k}e^{s_{j}}}\right)=-\log\left(\frac{1}{C}\right)=\log\left(C\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is a 
+\begin_inset Quotes eld
+\end_inset
+
+gradient check
+\begin_inset Quotes erd
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+The process of validation of an analytical gradient implementation.
+ 
+\begin_inset Newline newline
+\end_inset
+
+The analytical method is fast and exact but implementation is error prone
+ so we can test it using the numerical gradient which is very straightforward
+ but slow and approximate.
+\end_layout
+
+\begin_layout Subsubsection*
+State and describe 3 Old-School methods for image feature extraction:
+\end_layout
+
+\begin_layout Enumerate
+Color histogram
+\end_layout
+
+\begin_layout Enumerate
+Histogram of Oriented Gradients - Divide the image into 
+\begin_inset Formula $8\times8$
+\end_inset
+
+ sized blocks - for each pixel, compute the gradient direction and magnitude.
+ We then create a histogram of 9 
+\begin_inset Quotes eld
+\end_inset
+
+buckets
+\begin_inset Quotes erd
+\end_inset
+
+, corresponding to 9 angles.
+ We then add the relative amount of each gradient to each bucket.
+ 50 will be split half and half to the 40,60 buckets.
+\begin_inset Newline newline
+\end_inset
+
+We concatenate these histograms to get the description.
+\end_layout
+
+\begin_layout Enumerate
+Bag of words - Take a dataset of images, extract patches from them.
+ Cluster the patches.
+ Encode images by computing a histogram of counts by assigning each patch
+ to a cluster.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down a brief history of convolutional neural networks, including dates,
+ researchers etc.
+\end_layout
+
+\begin_layout Standard
+the study of the human brain is thousands of years old.
+ With the advent of modern electronics, it was only natural to try to harness
+ this thinking process.
+ The first step toward artificial neural networks came in 1943 when Warren
+ McCulloch, a neurophysiologist, and a young mathematician, Walter Pitts,
+ wrote a paper on how neurons might work.
+ They modeled a simple neural network with electrical circuits.
+ Reinforcing this concept of neurons and how they work was a book written
+ by Donald Hebb.
+ The Organization of Behavior was written in 1949.
+ It pointed out that neural pathways are strengthened each time that they
+ are used.
+\end_layout
+
+\begin_layout Standard
+As computers advanced into their infancy of the 1950s, it became possible
+ to begin to model the rudiments of these theories concerning human thought.
+ Nathanial Rochester from the IBM research laboratories led the first effort
+ to simulate a neural network.
+ That first attempt failed.
+ But later attempts were successful.
+ It was during this time that traditional computing began to flower and,
+ as it did, the emphasis in computing left the neural research in the background.
+\end_layout
+
+\begin_layout Standard
+Yet, throughout this time, advocates of "thinking machines" continued to
+ argue their cases.
+ In 1956 the Dartmouth Summer Research Project on Artificial Intelligence
+ provided a boost to both artificial intelligence and neural networks.
+ One of the outcomes of this process was to stimulate research in both the
+ intelligent side, AI, as it is known throughout the industry, and in the
+ much lower level neural processing part of the brain.
+\end_layout
+
+\begin_layout Standard
+In the years following the Dartmouth Project, John von Neumann suggested
+ imitating simple neuron functions by using telegraph relays or vacuum tubes.
+ Also, Frank Rosenblatt, a neuro-biologist of Cornell, began work on the
+ Perceptron.
+ He was intrigued with the operation of the eye of a fly.
+ Much of the processing which tells a fly to flee is done in its eye.
+ The Perceptron, which resulted from this research, was built in hardware
+ and is the oldest neural network still in use today.
+ A single-layer perceptron was found to be useful in classifying a continuous-va
+lued set of inputs into one of two classes.
+ The perceptron computes a weighted sum of the inputs, subtracts a threshold,
+ and passes one of two possible values out as the result.
+ Unfortunately, the perceptron is limited and was proven as such during
+ the "disillusioned years" in Marvin Minsky and Seymour Papert's 1969 book
+ Perceptrons.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Just kidding Ido and Itay.
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ sized picture, what can we know for sure about the dimensions of any filter
+ in the next layer?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $k\times k\times3$
+\end_inset
+
+ - filters always extend the full depth of the input volume
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ sized picture, what is the number of paramaters of a 
+\begin_inset Formula $k\times k$
+\end_inset
+
+ filter?
+\end_layout
+
+\begin_layout Standard
+5*5*3 + 1 (bias)
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ image.
+ Apply a 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter, stride 1.
+ What is the size of the output?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left((7-3)/1\right)+1=5\rightarrow5\times5$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ image.
+ Apply a 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter, stride 2.
+ What is the size of the output?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left((7-3)/2\right)+1=3\rightarrow3\times3$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is a common way to end up with the same size image?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3\times3$
+\end_inset
+
+ conv with zero padding of 1, with stride 1.
+\begin_inset Formula 
+\[
+(N+2-3)/1+1=N-1+1=N
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ image, 10 
+\begin_inset Formula $5\times5$
+\end_inset
+
+ filters, stride 1 pad 2.
+ What is the total output size?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $(32+2\cdot2-5)/1+1=32$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $32\times32\times10$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What does a 
+\begin_inset Formula $1\times1$
+\end_inset
+
+ convolution do?
+\end_layout
+
+\begin_layout Standard
+A simple dot product over 1 pixel, through all channels.
+\end_layout
+
+\begin_layout Paragraph*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ image followed by a Fully connected Layer.
+ What is the receptive field of a neuron in that layer?
+\end_layout
+
+\begin_layout Standard
+The entire image.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the typical CNN architecture structure Regex:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\left(\left(CONV-RELU\right)*N-POOL\right)*M-\left(FC-RELU\right)*K,SOFTMAX\right]$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
@@ -1721,7 +2192,7 @@ W_{\text{test}}=0.995W_{\text{test}}+0.005W_{t}
 \end_layout
 
 \begin_layout Subsubsection*
-State _ methods for Regularization?
+State 7 methods for Regularization?
 \end_layout
 
 \begin_layout Enumerate
@@ -2710,7 +3181,7 @@ Tag each pixel with the type of element inside it.
 \end_layout
 
 \begin_layout Subsubsection*
-State _ techniques for semantic segmentation:
+State 2 techniques for semantic segmentation:
 \end_layout
 
 \begin_layout Enumerate
@@ -3736,7 +4207,7 @@ Why are they called Variational Autoencoders?
 Still don't know.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Section*
 Week 14 - Domain Adaptation
 \end_layout
 

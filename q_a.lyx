@@ -432,6 +432,473 @@ One way is to choose it's hypothesis space.
 \end_layout
 
 \begin_layout Section*
+Week 6a - Neural Networks in Practice
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the multiclass SVM loss:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $L\left(f\left(x_{i}\right),y_{i}\right)=\sum_{j\neq y_{i}}\max\left(0,\left(f\left(x_{i}\right)_{j}+1\right)-f\left(x_{i}\right)_{y_{i}}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+In the multiclass SVM loss, what is the minimum achievable loss?
+\end_layout
+
+\begin_layout Standard
+0
+\end_layout
+
+\begin_layout Subsubsection*
+In the multiclass SVM loss, what is the maximum achievable loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $+\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the initial loss, when 
+\begin_inset Formula $W$
+\end_inset
+
+ is set to small values, 
+\begin_inset Formula $s\approx0$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $c-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the elastic net regularization method?
+\end_layout
+
+\begin_layout Standard
+weighted sum of 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Develop the softmax classifier loss (multinomial logistic regression?):
+\end_layout
+
+\begin_layout Enumerate
+Our neural network outputs the final activations, called - logits, unnormalized
+ log-probabilities: 
+\begin_inset Formula 
+\[
+s
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+We raise them to the exponent so we have positive values 
+\begin_inset Formula 
+\[
+e^{s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+We normalize the values in order to get a distribution:
+\begin_inset Formula 
+\[
+\hat{P}_{i}=P\left(Y=k|X=x_{i}\right)=\frac{e^{s_{k}}}{\sum_{j=1}^{k}e^{s_{j}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Our loss is the KL divergence between this distribution and the 
+\begin_inset Quotes eld
+\end_inset
+
+indicator distribution for class 
+\begin_inset Formula $k$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+P_{i}=P\left(Y=c|X=x_{i}\right)=\begin{cases}
+1 & c=k\\
+0 & \text{else}
+\end{cases}
+\]
+
+\end_inset
+
+ The KL divergence is:
+\begin_inset Formula 
+\begin{align*}
+KL\left(\hat{P}_{i}\|P_{i}\right) & =\sum_{c=1}^{C}P_{i}\left(c\right)\log\left(\frac{P_{i}\left(c\right)}{\hat{P}_{i}\left(c\right)}\right)\\
+ & =P_{i}\left(y_{i}\right)\log\left(\frac{P_{i}\left(y_{i}\right)}{\hat{P}_{i}\left(y_{i}\right)}\right)\\
+ & =1\cdot\log\left(\frac{1}{\hat{P}_{i}\left(y_{i}\right)}\right)\\
+ & =-\log\left(\hat{P}_{i}\left(y_{i}\right)\right)\\
+ & =-\log\left(\frac{e^{s_{y_{i}}}}{\sum_{j=1}^{k}e^{s_{j}}}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the minimal loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the maximal loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+At initialization all scores are approximately equal, what is the loss?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $-\log\left(\frac{e^{s_{y_{i}}}}{\sum_{j=1}^{k}e^{s_{j}}}\right)=-\log\left(\frac{1}{C}\right)=\log\left(C\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is a 
+\begin_inset Quotes eld
+\end_inset
+
+gradient check
+\begin_inset Quotes erd
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+The process of validation of an analytical gradient implementation.
+ 
+\begin_inset Newline newline
+\end_inset
+
+The analytical method is fast and exact but implementation is error prone
+ so we can test it using the numerical gradient which is very straightforward
+ but slow and approximate.
+\end_layout
+
+\begin_layout Subsubsection*
+State and describe 3 Old-School methods for image feature extraction:
+\end_layout
+
+\begin_layout Enumerate
+Color histogram
+\end_layout
+
+\begin_layout Enumerate
+Histogram of Oriented Gradients - Divide the image into 
+\begin_inset Formula $8\times8$
+\end_inset
+
+ sized blocks - for each pixel, compute the gradient direction and magnitude.
+ We then create a histogram of 9 
+\begin_inset Quotes eld
+\end_inset
+
+buckets
+\begin_inset Quotes erd
+\end_inset
+
+, corresponding to 9 angles.
+ We then add the relative amount of each gradient to each bucket.
+ 50 will be split half and half to the 40,60 buckets.
+\begin_inset Newline newline
+\end_inset
+
+We concatenate these histograms to get the description.
+\end_layout
+
+\begin_layout Enumerate
+Bag of words - Take a dataset of images, extract patches from them.
+ Cluster the patches.
+ Encode images by computing a histogram of counts by assigning each patch
+ to a cluster.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down a brief history of convolutional neural networks, including dates,
+ researchers etc.
+\end_layout
+
+\begin_layout Standard
+the study of the human brain is thousands of years old.
+ With the advent of modern electronics, it was only natural to try to harness
+ this thinking process.
+ The first step toward artificial neural networks came in 1943 when Warren
+ McCulloch, a neurophysiologist, and a young mathematician, Walter Pitts,
+ wrote a paper on how neurons might work.
+ They modeled a simple neural network with electrical circuits.
+ Reinforcing this concept of neurons and how they work was a book written
+ by Donald Hebb.
+ The Organization of Behavior was written in 1949.
+ It pointed out that neural pathways are strengthened each time that they
+ are used.
+\end_layout
+
+\begin_layout Standard
+As computers advanced into their infancy of the 1950s, it became possible
+ to begin to model the rudiments of these theories concerning human thought.
+ Nathanial Rochester from the IBM research laboratories led the first effort
+ to simulate a neural network.
+ That first attempt failed.
+ But later attempts were successful.
+ It was during this time that traditional computing began to flower and,
+ as it did, the emphasis in computing left the neural research in the background.
+\end_layout
+
+\begin_layout Standard
+Yet, throughout this time, advocates of "thinking machines" continued to
+ argue their cases.
+ In 1956 the Dartmouth Summer Research Project on Artificial Intelligence
+ provided a boost to both artificial intelligence and neural networks.
+ One of the outcomes of this process was to stimulate research in both the
+ intelligent side, AI, as it is known throughout the industry, and in the
+ much lower level neural processing part of the brain.
+\end_layout
+
+\begin_layout Standard
+In the years following the Dartmouth Project, John von Neumann suggested
+ imitating simple neuron functions by using telegraph relays or vacuum tubes.
+ Also, Frank Rosenblatt, a neuro-biologist of Cornell, began work on the
+ Perceptron.
+ He was intrigued with the operation of the eye of a fly.
+ Much of the processing which tells a fly to flee is done in its eye.
+ The Perceptron, which resulted from this research, was built in hardware
+ and is the oldest neural network still in use today.
+ A single-layer perceptron was found to be useful in classifying a continuous-va
+lued set of inputs into one of two classes.
+ The perceptron computes a weighted sum of the inputs, subtracts a threshold,
+ and passes one of two possible values out as the result.
+ Unfortunately, the perceptron is limited and was proven as such during
+ the "disillusioned years" in Marvin Minsky and Seymour Papert's 1969 book
+ Perceptrons.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Just kidding Ido and Itay.
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ sized picture, what can we know for sure about the dimensions of any filter
+ in the next layer?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $k\times k\times3$
+\end_inset
+
+ - filters always extend the full depth of the input volume
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ sized picture, what is the number of paramaters of a 
+\begin_inset Formula $k\times k$
+\end_inset
+
+ filter?
+\end_layout
+
+\begin_layout Standard
+5*5*3 + 1 (bias)
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ image.
+ Apply a 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter, stride 1.
+ What is the size of the output?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left((7-3)/1\right)+1=5\rightarrow5\times5$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+We have a 
+\begin_inset Formula $7\times7$
+\end_inset
+
+ image.
+ Apply a 
+\begin_inset Formula $3\times3$
+\end_inset
+
+ filter, stride 2.
+ What is the size of the output?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left((7-3)/2\right)+1=3\rightarrow3\times3$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is a common way to end up with the same size image?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3\times3$
+\end_inset
+
+ conv with zero padding of 1, with stride 1.
+\begin_inset Formula 
+\[
+(N+2-3)/1+1=N-1+1=N
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ image, 10 
+\begin_inset Formula $5\times5$
+\end_inset
+
+ filters, stride 1 pad 2.
+ What is the total output size?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $(32+2\cdot2-5)/1+1=32$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $32\times32\times10$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What does a 
+\begin_inset Formula $1\times1$
+\end_inset
+
+ convolution do?
+\end_layout
+
+\begin_layout Standard
+A simple dot product over 1 pixel, through all channels.
+\end_layout
+
+\begin_layout Paragraph*
+We have a 
+\begin_inset Formula $32\times32\times3$
+\end_inset
+
+ image followed by a Fully connected Layer.
+ What is the receptive field of a neuron in that layer?
+\end_layout
+
+\begin_layout Standard
+The entire image.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the typical CNN architecture structure Regex:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\left(\left(CONV-RELU\right)*N-POOL\right)*M-\left(FC-RELU\right)*K,SOFTMAX\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
 Week 7
 \end_layout
 
@@ -1725,7 +2192,7 @@ W_{\text{test}}=0.995W_{\text{test}}+0.005W_{t}
 \end_layout
 
 \begin_layout Subsubsection*
-State _ methods for Regularization?
+State 7 methods for Regularization?
 \end_layout
 
 \begin_layout Enumerate
@@ -2714,7 +3181,7 @@ Tag each pixel with the type of element inside it.
 \end_layout
 
 \begin_layout Subsubsection*
-State _ techniques for semantic segmentation:
+State 2 techniques for semantic segmentation:
 \end_layout
 
 \begin_layout Enumerate
@@ -3740,7 +4207,7 @@ Why are they called Variational Autoencoders?
 Still don't know.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Section*
 Week 14 - Domain Adaptation
 \end_layout
 
@@ -4977,6 +5444,425 @@ change the optimization of
 
 \begin_layout Standard
 Note: the second part is also unnecessary.
+\end_layout
+
+\begin_layout Section*
+Variational Autoencoders - Last Lecture
+\end_layout
+
+\begin_layout Subsubsection*
+Write down 
+\begin_inset Formula $P\left(x\right)$
+\end_inset
+
+ using the law of total probability, given latent variable 
+\begin_inset Formula $z$
+\end_inset
+
+, paramaterized by 
+\begin_inset Formula $\theta$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p\left(x\right)=\int_{z}P\left(x|z,\theta\right)p\left(z\right)dz
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What do we choose 
+\begin_inset Formula $P\left(X|z,\theta\right)$
+\end_inset
+
+ to be in VAEs?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathcal{N}\left(f\left(z,\theta\right),\sigma^{2}I\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Why?
+\end_layout
+
+\begin_layout Enumerate
+The log likelihood of 
+\begin_inset Formula $X$
+\end_inset
+
+ given 
+\begin_inset Formula $z$
+\end_inset
+
+ becomes proportional to the euclidian distance between 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $f\left(z,\theta\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The likelihood of 
+\begin_inset Formula $X$
+\end_inset
+
+ is differential w.r.t.
+ 
+\begin_inset Formula $\theta$
+\end_inset
+
+ so can perform gradient descent.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the justification for always using 
+\begin_inset Formula $z\sim\mathcal{N}\left(0,\sigma^{2}I\right)$
+\end_inset
+
+ for some hyperparameter 
+\begin_inset Formula $\sigma$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+We can assume that in it's first layers, the network will learn a mapping
+ from this noise to the 
+\begin_inset Quotes eld
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+ latent variables, and from there compute the image.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down an approximation for 
+\begin_inset Formula $p\left(x\right)=\int_{z}P\left(x|z,\theta\right)p\left(z\right)dz$
+\end_inset
+
+ ?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p\left(x\right)\approx\frac{1}{n}\sum_{i=1}^{n}P\left(x|z_{i}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the problem with this?
+\end_layout
+
+\begin_layout Standard
+Assuming we choose a small 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ (and we generally do, recall the 3 different 2s example), it is very rare
+ to sample a 
+\begin_inset Formula $z$
+\end_inset
+
+ which leads to 
+\begin_inset Formula $f\left(z,\theta\right)$
+\end_inset
+
+ close to 
+\begin_inset Formula $X$
+\end_inset
+
+ so we will likely have a sum of zeros.
+\end_layout
+
+\begin_layout Subsubsection*
+How does the VAE method overcome this challenge?
+\end_layout
+
+\begin_layout Standard
+We don't compute 
+\begin_inset Formula $p\left(x\right)$
+\end_inset
+
+ through 
+\begin_inset Formula $\mathbb{E}_{z\sim P}\left[p\left(x|z\right)\right]$
+\end_inset
+
+ which is hard, but compute 
+\begin_inset Formula $\log p\left(x\right)$
+\end_inset
+
+ through 
+\begin_inset Formula $\mathbb{E}_{z\sim Q\left(z|X\right)}\left[\log\left(p\left(x|z\right)\right)\right]$
+\end_inset
+
+ (which is easier due to the more likely presence of 
+\begin_inset Formula $z$
+\end_inset
+
+ which can lead to 
+\begin_inset Formula $X$
+\end_inset
+
+) along with a correction, based on the distance between 
+\begin_inset Formula $Q\left(X|z\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $P\left(z\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the ELBO:
+\end_layout
+
+\begin_layout Standard
+Start with the equality:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\log\left(p\left(X\right)\right)-KL\left(Q\left(z|X\right)||P\left(z|X\right)\right)=\mathbb{E}_{z\sim Q\left(z|X\right)}\left[\log\left(P\left(X|z\right)\right)\right]-KL\left(Q\left(z|X\right)||P\left(z\right)\right)
+\]
+
+\end_inset
+
+ Now the ELBO:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\log\left(p\left(X\right)\right)\geq\mathbb{E}_{z\sim Q\left(z|X\right)}\left[\log\left(P\left(X|z\right)\right)\right]-KL\left(Q\left(z|X\right)||P\left(z\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+In the equality above, why can we assume that maximizing the right side
+ will maximize the likelihood of 
+\begin_inset Formula $x$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+Some claim about 
+\begin_inset Quotes eld
+\end_inset
+
+if you have a neural net with high enough capacity we will have 
+\begin_inset Formula $KL\left(Q\left(z|X\right)||P\left(z|X\right)\right)=0$
+\end_inset
+
+ and we then optimize the likelihood of 
+\begin_inset Formula $x$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What are the paramaters of 
+\begin_inset Formula $Q\left(z|X\right)$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+The paramaters of a neural network which computes two functions: 
+\begin_inset Formula 
+\[
+\left(\mu\left(X,\omega\right),\Sigma\left(X,\omega\right)\right)
+\]
+
+\end_inset
+
+ 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is constrained to be diagonal.
+\end_layout
+
+\begin_layout Subsubsection*
+What is the closed form solution of 
+\begin_inset Formula $KL\left(Q\left(z|X\right)||P\left(z\right)\right)$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{2}\left(\text{trace}\left(\Sigma\left(x\right)\right)+\|\mu\|^{2}-k-\det\left(\Sigma\left(x\right)\right)\right)
+\]
+
+\end_inset
+
+This is derivable.
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the feedforward phase for VAEs:
+\end_layout
+
+\begin_layout Standard
+Feedforward:
+\end_layout
+
+\begin_layout Enumerate
+Sample some 
+\begin_inset Formula $X$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Run the encoder 
+\begin_inset Formula $Q\left(z|X\right)$
+\end_inset
+
+ in order to obtain 
+\begin_inset Formula $\mu\left(X\right),\Sigma\left(X\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Sample 
+\begin_inset Formula $z$
+\end_inset
+
+ using the reparamatization trick: sample 
+\begin_inset Formula $\epsilon\sim\mathcal{N}\left(0,I\right)$
+\end_inset
+
+, then compute 
+\begin_inset Formula $z=\mu\left(X\right)+\Sigma^{\frac{1}{2}}\left(X\right)\cdot\epsilon$
+\end_inset
+
+.
+ This 
+\begin_inset Formula $z$
+\end_inset
+
+ distributes: 
+\begin_inset Formula $\mathcal{N}\left(\mu\left(X\right),\Sigma\left(X\right)\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Run the encoder on 
+\begin_inset Formula $z$
+\end_inset
+
+ generating 
+\begin_inset Formula $f\left(z\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the PDF of a multivariate normal function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(2\pi\right)^{\frac{-k}{2}}\det\left(\Sigma\right)^{-\frac{1}{2}}e^{-\frac{1}{2}\left(x-\mu\right)^{T}\Sigma^{-1}\left(x-\mu\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Describe the Backpropogation procedure in VAEs:
+\end_layout
+
+\begin_layout Standard
+After the feedforward we backprop in order to maximize:
+\begin_inset Formula 
+\[
+\log\left(P\left(X|z\right)\right)-KL\left(Q\left(z|X\right)||P\left(z\right)\right)
+\]
+
+\end_inset
+
+We optimize both the encoder and decoder on both losses.
+ We have a closed form solution for the 
+\begin_inset Formula $KL$
+\end_inset
+
+ divergence.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The log likelihood can be computed as such:
+\begin_inset Formula 
+\begin{align*}
+\log\left(P\left(X|z\right)\right) & =\log\left(\left(2\pi\right)^{\frac{-k}{2}}\det\left(\sigma^{2}I\right)^{-\frac{1}{2}}e^{-\frac{1}{2}\left(x-f\left(z\right)\right)^{T}\left(\sigma^{2}I\right)^{-1}\left(x-f\left(z\right)\right)}\right)\\
+ & =\log\left(\left(2\pi\right)^{\frac{-k}{2}}\det\left(\sigma^{2}I\right)^{-\frac{1}{2}}\right)+\log\left(e^{-\frac{1}{2}\left(x-f\left(z\right)\right)^{T}\left(\sigma^{2}I\right)^{-1}\left(x-f\left(z\right)\right)}\right)\\
+ & =C-\frac{1}{2\sigma}\left(x-f\left(z\right)\right)^{T}\left(x-f\left(z\right)\right)\\
+ & =C-O\left(\|x-f\left(z\right)\|_{2}^{2}\right)
+\end{align*}
+
+\end_inset
+
+ This is maximized when 
+\begin_inset Formula $\|x-f\left(z\right)\|_{2}^{2}$
+\end_inset
+
+ is minimized, so we simply backprop from this norm.
 \end_layout
 
 \end_body
