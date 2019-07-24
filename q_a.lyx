@@ -1,5 +1,5 @@
-#LyX 2.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 544
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -7,6 +7,9 @@
 \textclass article
 \begin_preamble
 \usepackage{algorithm,algpseudocode}
+% Added by lyx2lyx
+\renewcommand{\textendash}{--}
+\renewcommand{\textemdash}{---}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -24,8 +27,6 @@
 \font_osf false
 \font_sf_scale 100 100
 \font_tt_scale 100 100
-\use_microtype false
-\use_dash_ligatures true
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -55,7 +56,6 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
-\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -64,10 +64,7 @@
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\is_math_indent 0
-\math_numbering_side default
-\quotes_style english
-\dynamic_quotes 0
+\quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -135,7 +132,6 @@ Deep learning
 \emph off
 \bar no
 \strikeout off
-\xout off
 \uuline off
 \uwave off
 \noun off
@@ -152,7 +148,6 @@ Deep learning
 \emph default
 \bar default
 \strikeout default
-\xout default
 \uuline default
 \uwave default
 \noun default
@@ -429,6 +424,707 @@ How can we control an algorithm capacity?
 
 \begin_layout Standard
 One way is to choose it's hypothesis space.
+\end_layout
+
+\begin_layout Section*
+Week 3
+\end_layout
+
+\begin_layout Subsubsection*
+Write linear regressor hypothesis class
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathcal{H}=\left\{ f_{w}\left(x\right)=\left\langle w,x\right\rangle |w\in\mathbb{R}^{n}\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Write the solution for linear regression
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+f\left(w\right) & =\left\Vert y-Xw\right\Vert ^{2}\\
+f'\left(w\right) & =\left(-X^{T}\right)\cdot2\cdot\left(y-Xw\right)\\
+f'\left(w\right) & =2\cdot\left(X^{T}Xw-X^{T}y\right)\\
+0 & =2\left(X^{T}Xw-X^{T}y\right)\\
+X^{T}Xw & =X^{T}y\\
+w & =(X^{T}X)^{-1}X^{T}y
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula $w=(X^{T}\cdot X)^{-1}\cdot X^{T}\cdot y$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Name one clustering algorithm
+\end_layout
+
+\begin_layout Enumerate
+k-means
+\end_layout
+
+\begin_layout Subsubsection*
+What is k-means objective function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $X=\text{n points}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $P=\text{Partition of X into k sets}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $P=\left\{ 1,...,k\right\} ^{n}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\arg\underset{P}{\min}$
+\end_inset
+
+
+\begin_inset Formula $\left(\overset{k}{\underset{i=1}{\sum}}\underset{x\in P_{i}}{\sum}\left\Vert x-\mu_{i}\right\Vert ^{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Give a huristic that sove k-means
+\end_layout
+
+\begin_layout Standard
+Lloyd's algorithm:
+\end_layout
+
+\begin_layout Enumerate
+Generate 
+\begin_inset Formula $\mu=\left\{ \mu_{1}...\mu_{k}\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Repeat:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Assign each point in 
+\begin_inset Formula $X$
+\end_inset
+
+ to the closest point in 
+\begin_inset Formula $\mu$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Update each 
+\begin_inset Formula $\mu_{i}$
+\end_inset
+
+ to be the real mean of its current set
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $\mu$
+\end_inset
+
+ did not change, stop
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Always converges (The distances are only getting smaller)
+\end_layout
+
+\begin_layout Subsubsection*
+Write the hypophesis class of SVM:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\mathcal{H}=\left\{ f_{w}\left(x\right)=sign\left(\left\langle w,x\right\rangle +b\right)|w\in\mathbb{R}^{n},b\in\mathbb{R}\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is a solution to SVM?
+\end_layout
+
+\begin_layout Standard
+A hyper plane with max-margin or biggest separation
+\end_layout
+
+\begin_layout Subsubsection*
+Write down SVM objective function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\underset{w,b:\forall i:y_{i}\left(\left\langle w,x\right\rangle +b\right)\ge0}{\max}\underset{i}{\min}\left(\left|\frac{\left\langle w,x\right\rangle +b}{\left\Vert w\right\Vert _{2}}\right|\right)=$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\underset{w,b:\forall i:y_{i}\left(\left\langle w,x\right\rangle +b\right)\ge1}{\max}\underset{i}{\min}\left(\left|\frac{1}{\left\Vert w\right\Vert _{2}}\right|\right)=$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\underset{w,b:\forall i:y_{i}\left(\left\langle w,x\right\rangle +b\right)\ge1}{\max}\frac{1}{\left\Vert w\right\Vert _{2}}\sim$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\underset{w,b:\forall i:y_{i}\left(\left\langle w,x\right\rangle +b\right)\ge1}{\min}\frac{1}{2}\left\Vert w\right\Vert _{2}^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+In cases where the data is not linear-speratable, how can we still use SVM?
+\end_layout
+
+\begin_layout Standard
+Use kernels.
+ Instead of trying to classify 
+\begin_inset Formula $X$
+\end_inset
+
+, classify 
+\begin_inset Formula $\Phi\left(X\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\Phi:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Give 1 problem with choosing a general high dimention kernel (RBF)
+\end_layout
+
+\begin_layout Enumerate
+Choosing general kernel might lead to good training loss, but poor generalizatio
+n
+\end_layout
+
+\begin_layout Subsubsection*
+Give 3 problem with choosing a specified kernel
+\end_layout
+
+\begin_layout Enumerate
+Not automatic - require sometimes decades
+\end_layout
+
+\begin_layout Enumerate
+Not generic - require tailor made kernel per dataset
+\end_layout
+
+\begin_layout Enumerate
+Not transferable - different domains require different features
+\end_layout
+
+\begin_layout Section*
+Week 5
+\end_layout
+
+\begin_layout Subsubsection*
+Define convex function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f\left(\alpha x+\left(1-\alpha\right)y\right)\le\alpha f\left(x\right)+\left(1-\alpha\right)f\left(y\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Write down Jensen's inequality for 
+\begin_inset Formula $f$
+\end_inset
+
+ which is convex
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\forall x_{1}...x_{T}:f\left(\frac{1}{T}\underset{i=1}{\overset{T}{\sum}}x_{i}\right)\le\frac{1}{T}\underset{i=1}{\overset{T}{\sum}}f\left(x_{i}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Write taylor first order approximation for function 
+\begin_inset Formula $g:\mathbb{R}^{n}\rightarrow\mathbb{R}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $g\left(u\right)\approx g\left(w\right)+\left\langle u-w,\nabla g\left(w\right)\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Gradient Desent algorithm:
+\end_layout
+
+\begin_layout Enumerate
+Parameter: 
+\begin_inset Formula $\mu$
+\end_inset
+
+ - learning rate, 
+\begin_inset Formula $T$
+\end_inset
+
+ - iterations
+\end_layout
+
+\begin_layout Enumerate
+Init: 
+\begin_inset Formula $w_{0}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+For 
+\begin_inset Formula $t=1...T$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $w_{t}=w_{t-1}-\mu\nabla g\left(w_{t-1}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection*
+What would be the output of gradient desent algorithm when optimizing convex
+ and non-convex problems?
+\end_layout
+
+\begin_layout Enumerate
+convex 
+\begin_inset Formula $\frac{1}{T}\underset{i=1}{\overset{T}{\sum}}w_{i}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+non-convex
+\begin_inset Formula $\underset{w_{i}}{argmin}g\left(w_{i}\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+What is the optimization objective for each gradient decent iteration?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Close with good improvement
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $w_{t}=\underset{w}{\arg\min}\left(\frac{1}{2}\left\Vert w-w_{t-1}\right\Vert _{2}^{2}+\mu\left(g\left(w_{t-1}\right)+\left\langle w-w_{t-1},\nabla g\left(w_{t-1}\right)\right\rangle \right)\right)$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The minimum is in 
+\begin_inset Formula $w_{t}=w_{t-1}-\mu\nabla g\left(w_{t-1}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Assuming that 
+\begin_inset Formula $g$
+\end_inset
+
+ is a convex-Lipschitz function, and let 
+\begin_inset Formula $\left\Vert w^{*}\right\Vert \le B$
+\end_inset
+
+, prove an upper bound on 
+\begin_inset Formula $g(\overline{w})-g\left(w^{*}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First set 
+\begin_inset Formula $\mu=\sqrt{\frac{B^{2}}{\rho^{2}T}}$
+\end_inset
+
+, and run 
+\begin_inset Formula $T=\frac{B^{2}\rho^{2}}{\epsilon^{2}}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+g(\overline{w})-g\left(w^{*}\right) & =g\left(\frac{1}{T}\overset{T}{\underset{t=0}{\sum}w_{t}}\right)-g\left(w^{*}\right)\\
+ & \le\frac{1}{T}\overset{T}{\underset{t=0}{\sum}}\left(g\left(w_{t}\right)\right)-g\left(w^{*}\right)\\
+ & =\frac{1}{T}\overset{T}{\underset{t=0}{\sum}}\left(g\left(w_{t}\right)-g\left(w^{*}\right)\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+for every 
+\begin_inset Formula $t$
+\end_inset
+
+: 
+\begin_inset Formula $g(\overline{w})-g\left(w^{*}\right)\le\left\langle w_{t}-w^{*},\nabla g\left(w_{t}\right)\right\rangle $
+\end_inset
+
+, as such from the previous part 
+\begin_inset Formula $g(\overline{w})-g\left(w^{*}\right)\le\frac{1}{T}\overset{T}{\underset{t=0}{\sum}}\left\langle w_{t}-w^{*},\nabla g\left(w_{t}\right)\right\rangle $
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left\langle w_{t}-w^{*},\nabla g\left(w_{t}\right)\right\rangle  & =\frac{1}{\mu}\left\langle w_{t}-w^{*},\mu\nabla g\left(w_{t}\right)\right\rangle \\
+ & =\frac{1}{2\mu}\left(-\left\Vert w_{t}-w^{*}-\mu\nabla g\left(w_{t}\right)\right\Vert ^{2}+\left\Vert w_{t}-w^{*}\right\Vert ^{2}+\mu^{2}\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)\\
+ & =\frac{1}{2\mu}\left(-\left\Vert w_{t+1}-w^{*}\right\Vert ^{2}+\left\Vert w_{t}-w^{*}\right\Vert ^{2}+\mu^{2}\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Replacing the values, we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+g(\overline{w})-g\left(w^{*}\right) & \le\frac{1}{T}\overset{T}{\underset{t=0}{\sum}}\left\langle w_{t}-w^{*},\nabla g\left(w_{t}\right)\right\rangle \\
+ & =\frac{1}{T}\overset{T}{\underset{t=0}{\sum}}\frac{1}{2\mu}\left(-\left\Vert w_{t+1}-w^{*}\right\Vert ^{2}+\left\Vert w_{t}-w^{*}\right\Vert ^{2}+\mu^{2}\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)\\
+ & =\frac{1}{2\mu T}\left(\left\Vert w_{0}-w^{*}\right\Vert ^{2}-\left\Vert w_{T+1}-w^{*}\right\Vert ^{2}\right)+\frac{1}{2\mu T}\overset{T}{\underset{t=0}{\sum}}\left(\mu^{2}\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)\\
+ & \le\frac{1}{2\mu T}\left(\left\Vert w_{0}-w^{*}\right\Vert ^{2}\right)+\frac{1}{2\mu T}\overset{T}{\underset{t=0}{\sum}}\left(\mu^{2}\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)
+\end{align*}
+
+\end_inset
+
+We know that 
+\begin_inset Formula $w_{0}=0$
+\end_inset
+
+, so:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+g(\overline{w})-g\left(w^{*}\right) & \le\frac{1}{2\mu T}\left(\left\Vert w_{0}-w^{*}\right\Vert ^{2}\right)+\frac{1}{2\mu T}\overset{T}{\underset{t=0}{\sum}}\left(\mu^{2}\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)\\
+ & =\frac{\left\Vert w^{*}\right\Vert ^{2}}{2\mu T}+\frac{\mu}{2T}\overset{T}{\underset{t=0}{\sum}}\left(\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{\left\Vert w^{*}\right\Vert ^{2}}{2\mu T}+\frac{\mu}{2T}\overset{T}{\underset{t=0}{\sum}}\left(\left\Vert \nabla g\left(w_{t}\right)\right\Vert \right) & \le\frac{B^{2}}{2\mu T}+\frac{\mu}{2T}\overset{T}{\underset{t=0}{\sum}}\rho^{2}\\
+ & =\frac{B^{2}}{2\mu T}+\frac{\mu\rho^{2}}{2}\\
+ & =\frac{B^{2}}{2\sqrt{\frac{B^{2}}{\rho^{2}T}}T}+\frac{\sqrt{\frac{B^{2}}{\rho^{2}T}}\rho^{2}}{2}\\
+\frac{B^{2}\rho^{2}}{\epsilon^{2}} & =\frac{B\rho\sqrt{T}}{2T}+\frac{B\rho^{2}}{2\rho\sqrt{T}}\\
+ & =\frac{B\rho}{2\sqrt{T}}+\frac{B\rho}{2\sqrt{T}}=\frac{B\rho}{\sqrt{T}}\\
+ & =\frac{B\rho}{\frac{B\rho}{\epsilon}}=\epsilon
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is the problem with Gradient Desent?
+\end_layout
+
+\begin_layout Standard
+It's computatinaly expensive to compute the gradient over all 
+\begin_inset Formula $X$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+What is Stochastic Gradient Desent algorithm?
+\end_layout
+
+\begin_layout Standard
+Like Gradient Desent algorithm, but instead of computing the gradient explicitly
+, we instead estimates it as 
+\begin_inset Formula $\nabla f\left(X\right)=\underset{x\in X}{\mathbb{E}}\left[\nabla f\left(x\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Write down the chain rule:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{\partial f}{\partial x}=\frac{\partial f}{\partial q}\frac{\partial q}{\partial x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Fill the derivative reletive to 
+\begin_inset Formula $f$
+\end_inset
+
+ of the following image:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ./back_prop_fill.png
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+===========================
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename ./back_prop_fill_sol.png
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Fill the gradient reletiv to 
+\begin_inset Formula $f$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ./back_prop_fill2.png
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+=============================
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename ./back_prop_fill2_sol.png
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Explain add mul and max gates as to what they do to the gradient
+\end_layout
+
+\begin_layout Enumerate
+max - routes
+\end_layout
+
+\begin_layout Enumerate
+add - distributes
+\end_layout
+
+\begin_layout Enumerate
+mul - switchs
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ./grad_distribution_per_gate.png
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Given 
+\begin_inset Formula $X$
+\end_inset
+
+ batch of size 
+\begin_inset Formula $N_{batch}\times D$
+\end_inset
+
+ and 
+\begin_inset Formula $w$
+\end_inset
+
+ layer weights of size 
+\begin_inset Formula $D\times M$
+\end_inset
+
+, and 
+\begin_inset Formula $y=f\left(x,w\right)=xw$
+\end_inset
+
+, what would be the size of 
+\begin_inset Formula $\frac{\partial f}{\partial x}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $y$
+\end_inset
+
+ size is 
+\begin_inset Formula $N_{batch}\times M$
+\end_inset
+
+, as such 
+\begin_inset Formula $\frac{\partial f}{\partial x}$
+\end_inset
+
+ size is 
+\begin_inset Formula $\left(N_{batch}\times M\right)\times\left(N_{batch}\times D\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Assuming that you have 
+\begin_inset Formula $\frac{\partial L}{\partial y}$
+\end_inset
+
+ and you wish to compute 
+\begin_inset Formula $\frac{\partial L}{\partial x}$
+\end_inset
+
+ without holding in the memory the whole 
+\begin_inset Formula $\frac{\partial y}{\partial x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+you can just compute 
+\begin_inset Formula $\frac{\partial L}{\partial x_{\left(i,j\right)}}=\frac{\partial L}{\partial y}\cdot\frac{\partial y}{\partial x_{\left(i,j\right)}}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
@@ -2828,7 +3524,7 @@ How does a Dense Block (from dense net) look like?
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/denseblock.png
+	filename ./denseblock.png
 	width 3cm
 
 \end_inset
@@ -2967,7 +3663,7 @@ Train the model such that at every step it should predict the next character
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/rnn_nlp_charlevel_example.png
+	filename ./rnn_nlp_charlevel_example.png
 	width 5cm
 
 \end_inset
@@ -2981,7 +3677,7 @@ Feed forward the character it predict to generate:
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/rnn_nlp_charlevel_example2.png
+	filename ./rnn_nlp_charlevel_example2.png
 	width 5cm
 
 \end_inset
@@ -3012,7 +3708,7 @@ Unfold the layer repetition in chunks and back propogate on only those chunks
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/truncated_bpptt.png
+	filename ./truncated_bpptt.png
 	width 4cm
 
 \end_inset
@@ -3077,7 +3773,7 @@ At each RNN step output weights vector
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/attention_model.png
+	filename attention_model.png
 	width 7cm
 
 \end_inset
@@ -3096,7 +3792,7 @@ running the input of each timestamp of a RNN as a sequence that goes through
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/mutilayerRNN.png
+	filename ./mutilayerRNN.png
 	width 4cm
 
 \end_inset
@@ -3118,7 +3814,7 @@ What is the structure of LSTM?
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/LSTM.png
+	filename ./LSTM.png
 	width 12cm
 
 \end_inset
@@ -3150,7 +3846,7 @@ vanish
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/home/kessi/Documents/DCNN-Q-A/LSTM_highway.png
+	filename ./LSTM_highway.png
 	width 8cm
 
 \end_inset
@@ -4755,7 +5451,6 @@ Prove that the
 \emph off
 \bar no
 \strikeout off
-\xout off
 \uuline off
 \uwave off
 \noun off
@@ -5127,7 +5822,6 @@ where
 \emph off
 \bar no
 \strikeout off
-\xout off
 \uuline off
 \uwave off
 \noun off
@@ -5282,7 +5976,6 @@ What is the gradient step for
 \emph off
 \bar no
 \strikeout off
-\xout off
 \uuline off
 \uwave off
 \noun off
@@ -5310,7 +6003,6 @@ What is the gradient step for
 \emph off
 \bar no
 \strikeout off
-\xout off
 \uuline off
 \uwave off
 \noun off
@@ -5342,7 +6034,6 @@ It has two steps.
 \emph off
 \bar no
 \strikeout off
-\xout off
 \uuline off
 \uwave off
 \noun off
